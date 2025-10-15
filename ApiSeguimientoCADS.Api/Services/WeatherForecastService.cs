@@ -5,6 +5,7 @@
 namespace ApiSeguimientoCADS.Api.Services
 {
     using ApiSeguimientoCADS.Api.Models;
+    using ApiSeguimientoCADS.Api.Services.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Linq;

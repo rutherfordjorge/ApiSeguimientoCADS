@@ -4,6 +4,8 @@
 
 using ApiSeguimientoCADS.Api.Configuration;
 using ApiSeguimientoCADS.Api.Middlewares;
+using ApiSeguimientoCADS.Api.Services;
+using ApiSeguimientoCADS.Api.Services.Interfaces;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using NLog.Extensions.Logging;
@@ -55,7 +57,8 @@ builder.Services.AddApiVersioning(options =>
 });
 
 // Servicios de la aplicación
-builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Services.IWeatherForecastService, ApiSeguimientoCADS.Api.Services.WeatherForecastService>();
+builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
+builder.Services.AddSingleton<IWeatherForecastService, ApiSeguimientoCADS.Api.Services.WeatherForecastService>();
 builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Handlers.IWeatherForecastHandler, ApiSeguimientoCADS.Api.Handlers.WeatherForecastHandler>();
 builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Infrastructure.Repositories.IProductRepository, ApiSeguimientoCADS.Api.Infrastructure.Repositories.InMemoryProductRepository>();
 builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Handlers.IProductHandler, ApiSeguimientoCADS.Api.Handlers.ProductHandler>();
