@@ -4,7 +4,7 @@
 
 namespace ApiSeguimientoCADS.Api.Controllers
 {
-    using ApiSeguimientoCADS.Api.Handlers;
+    using ApiSeguimientoCADS.Api.Handlers.Interfaces;
     using ApiSeguimientoCADS.Api.Models.Requests;
     using ApiSeguimientoCADS.Api.Models.Responses;
     using ApiSeguimientoCADS.Api.Security;

@@ -3,6 +3,8 @@
 // </copyright>
 
 using ApiSeguimientoCADS.Api.Configuration;
+using ApiSeguimientoCADS.Api.Handlers;
+using ApiSeguimientoCADS.Api.Handlers.Interfaces;
 using ApiSeguimientoCADS.Api.Middlewares;
 using ApiSeguimientoCADS.Api.Services;
 using ApiSeguimientoCADS.Api.Services.Interfaces;
@@ -58,10 +60,11 @@ builder.Services.AddApiVersioning(options =>
 
 // Servicios de la aplicación
 builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
-builder.Services.AddSingleton<IWeatherForecastService, ApiSeguimientoCADS.Api.Services.WeatherForecastService>();
-builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Handlers.IWeatherForecastHandler, ApiSeguimientoCADS.Api.Handlers.WeatherForecastHandler>();
+builder.Services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
+builder.Services.AddSingleton<IWeatherForecastHandler, WeatherForecastHandler>();
 builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Infrastructure.Repositories.IProductRepository, ApiSeguimientoCADS.Api.Infrastructure.Repositories.InMemoryProductRepository>();
-builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Handlers.IProductHandler, ApiSeguimientoCADS.Api.Handlers.ProductHandler>();
+builder.Services.AddSingleton<IProductHandler, ProductHandler>();
+builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
 
 // -----------------------------
 // Construcción y configuración de la app
