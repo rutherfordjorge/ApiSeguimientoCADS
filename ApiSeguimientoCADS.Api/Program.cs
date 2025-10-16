@@ -5,92 +5,101 @@
 using ApiSeguimientoCADS.Api.Configuration;
 using ApiSeguimientoCADS.Api.Handlers;
 using ApiSeguimientoCADS.Api.Handlers.Interfaces;
+using ApiSeguimientoCADS.Api.Infrastructure.Repositories;
 using ApiSeguimientoCADS.Api.Middlewares;
+using ApiSeguimientoCADS.Api.Security.Logger;
 using ApiSeguimientoCADS.Api.Services;
 using ApiSeguimientoCADS.Api.Services.Interfaces;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
-using NLog.Extensions.Logging;
+using NLog;
 using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
+// Configurar NLog antes de construir el builder
+var logger = LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
+logger.Info("========== Iniciando API Seguimiento CADS ==========");
 
-// -----------------------------
-// Configuración de Logging
-// -----------------------------
-// -----------------------------
-// Configuración de Logging
-// -----------------------------
-builder.Logging.ClearProviders();
-
-if (builder.Environment.IsDevelopment())
+try
 {
-    builder.Logging.AddConsole();
-    builder.Logging.AddNLog(builder.Configuration.GetSection("NLog"));
-}
-else
-{
-    builder.Logging.AddConsole();
+    var builder = WebApplication.CreateBuilder(args);
 
-    // Si deseas habilitar NLog también fuera de desarrollo, descomenta la siguiente línea:
-    // builder.Logging.AddNLog(builder.Configuration.GetSection("NLog"));
-}
+    // Configurar el ambiente
+    var environment = builder.Environment.EnvironmentName;
+    logger.Info($"Ambiente detectado: {environment}");
 
-builder.Host.UseNLog();
+    // -----------------------------
+    // Configuración de Logging con NLog
+    // -----------------------------
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-// -----------------------------
-// Configuración de Servicios
-// -----------------------------
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+    // Registrar AppLogger en DI
+    builder.Services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
 
-// Versionamiento de API
-builder.Services.AddApiVersioning(options =>
-{
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.ReportApiVersions = true;
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
+    // -----------------------------
+    // Configuración de Servicios
+    // -----------------------------
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
-// Servicios de la aplicación
-builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
-builder.Services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
-builder.Services.AddSingleton<IWeatherForecastHandler, WeatherForecastHandler>();
-builder.Services.AddSingleton<ApiSeguimientoCADS.Api.Infrastructure.Repositories.IProductRepository, ApiSeguimientoCADS.Api.Infrastructure.Repositories.InMemoryProductRepository>();
-builder.Services.AddSingleton<IProductHandler, ProductHandler>();
-builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
-
-// -----------------------------
-// Construcción y configuración de la app
-// -----------------------------
-var app = builder.Build();
-
-var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    // Versionamiento de API
+    builder.Services.AddApiVersioning(options =>
     {
-        foreach (var description in provider.ApiVersionDescriptions)
-        {
-            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-        }
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.ReportApiVersions = true;
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
     });
+
+    // Servicios de la aplicación
+    builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
+    builder.Services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
+    builder.Services.AddSingleton<IWeatherForecastHandler, WeatherForecastHandler>();
+    builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
+    builder.Services.AddSingleton<IProductHandler, ProductHandler>();
+    builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
+
+    // -----------------------------
+    // Construcción y configuración de la app
+    // -----------------------------
+    var app = builder.Build();
+
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            foreach (var description in provider.ApiVersionDescriptions)
+            {
+                options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+            }
+        });
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.UseMiddleware<GlobalExceptionMiddleware>();
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseMiddleware<GlobalExceptionMiddleware>();
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    logger.Fatal(ex, "La aplicación se detuvo inesperadamente durante el inicio");
+    throw;
+}
+finally
+{
+    logger.Info("========== Cerrando API Seguimiento CADS ==========");
+    LogManager.Shutdown();
+}
 
 /// <summary>
 /// Clase Program parcial para pruebas de integración.
