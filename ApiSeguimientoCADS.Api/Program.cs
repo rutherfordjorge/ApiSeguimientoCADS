@@ -83,6 +83,7 @@ try
         });
     }
 
+    app.UseMiddleware<RequestIdMiddleware>();
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.UseMiddleware<GlobalExceptionMiddleware>();
