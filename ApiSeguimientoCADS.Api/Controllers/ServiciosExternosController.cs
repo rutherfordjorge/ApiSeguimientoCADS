@@ -5,12 +5,16 @@
 namespace ApiSeguimientoCADS.Api.Controllers
 {
     using ApiSeguimientoCADS.Api.Models.Requests;
+    using Asp.Versioning;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// Controlador que valida y obtiene valores de las API's externas.
     /// </summary>
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/servicios-externos")]
     public class ServiciosExternosController : Controller
     {
         /// <summary>
@@ -19,6 +23,8 @@ namespace ApiSeguimientoCADS.Api.Controllers
         /// <returns>A <see cref="Task{IActionResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost("Validate")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Validate([FromForm] ExternalRequest request)
         {
             try
