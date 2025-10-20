@@ -5,6 +5,7 @@ namespace ApiSeguimientoCADS.Api.Configuration
 {
     using ApiSeguimientoCADS.Api.Handlers;
     using ApiSeguimientoCADS.Api.Handlers.Interfaces;
+    using ApiSeguimientoCADS.Api.Models.Settings;
     using ApiSeguimientoCADS.Api.Services;
     using ApiSeguimientoCADS.Api.Services.Interfaces;
 
@@ -21,10 +22,17 @@ namespace ApiSeguimientoCADS.Api.Configuration
         public static WebApplicationBuilder AddSeguimientoCadsServices(this WebApplicationBuilder builder)
         {
             ArgumentNullException.ThrowIfNull(builder);
+
+            // Configurar opciones desde appsettings
+            builder.Services.Configure<SiniestrosApiSettings>(
+                builder.Configuration.GetSection("SiniestrosApi"));
+
+            // Registrar servicios
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
             builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
             builder.Services.AddScoped<ICadsService, CadsService>();
+            builder.Services.AddScoped<ISiniestrosService, SiniestrosService>();
 
             return builder;
         }
