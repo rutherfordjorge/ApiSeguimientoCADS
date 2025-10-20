@@ -33,7 +33,7 @@ try
     builder.Host.UseNLog();
 
     // Registrar AppLogger en DI
-    builder.Services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
+    builder.Services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
     builder.Services.AddHealthChecks();
 
     // -----------------------------
