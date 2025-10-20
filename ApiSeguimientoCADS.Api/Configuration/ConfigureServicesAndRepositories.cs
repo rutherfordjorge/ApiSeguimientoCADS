@@ -26,6 +26,8 @@ namespace ApiSeguimientoCADS.Api.Configuration
             // Configurar opciones desde appsettings
             builder.Services.Configure<SiniestrosApiSettings>(
                 builder.Configuration.GetSection("SiniestrosApi"));
+            builder.Services.Configure<DatosSiniestroApiSettings>(
+                builder.Configuration.GetSection("DatosSiniestroApi"));
 
             // Registrar servicios
             builder.Services.AddScoped<ITokenService, TokenService>();
@@ -33,6 +35,7 @@ namespace ApiSeguimientoCADS.Api.Configuration
             builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
             builder.Services.AddScoped<ICadsService, CadsService>();
             builder.Services.AddScoped<ISiniestrosService, SiniestrosService>();
+            builder.Services.AddScoped<IDatosSiniestroService, DatosSiniestroService>();
 
             return builder;
         }
