@@ -27,7 +27,7 @@ namespace ApiSeguimientoCADS.Api.Services
         /// <param name="logger">logger</param>
         public HttpClientService(HttpClient http, IAppLogger<HttpClientService> logger)
         {
-            this._http = http ?? throw new ArgumentNullException(nameof(logger));
+            this._http = http ?? throw new ArgumentNullException(nameof(http));
             this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -41,9 +41,15 @@ namespace ApiSeguimientoCADS.Api.Services
         {
             var responseEntity = new ApiResponse<T>();
 
+            // Declarar las variables FUERA del try para que sean accesibles en el catch
+            Guid processId = Guid.Empty;
+            System.Diagnostics.Stopwatch? stopwatch = null;
+
             try
             {
                 ArgumentNullException.ThrowIfNull(request);
+                ArgumentNullException.ThrowIfNull(request.Url);
+
                 var logInput = new
                 {
                     Method = request.Method.ToString(),
@@ -51,8 +57,7 @@ namespace ApiSeguimientoCADS.Api.Services
                     HasBody = request.Body != null,
                     HeaderCount = request.Headers?.Count ?? 0,
                 };
-
-                var (processId, stopwatch) = this._logger.StartProcess(logInput);
+                (processId, stopwatch) = this._logger.StartProcess(logInput);
 
                 this._logger.Info($"Enviando solicitud {request.Method} a {request.Url}");
 
@@ -75,7 +80,7 @@ namespace ApiSeguimientoCADS.Api.Services
                     this._logger.Debug("Token Bearer agregado");
                 }
 
-                if (request.Body != null && (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put))
+                if (request.Body != null && (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put || request.Method == HttpMethod.Patch))
                 {
                     var json = JsonSerializer.Serialize(request.Body);
                     httpRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -106,8 +111,13 @@ namespace ApiSeguimientoCADS.Api.Services
             }
             catch (HttpRequestException ex)
             {
+                this._logger.LogError(ex);
                 responseEntity.StatusCode = HttpStatusCode.InternalServerError;
                 responseEntity.RawResponse = ex.Message;
+                if (stopwatch != null && processId != Guid.Empty)
+                {
+                    this._logger.EndProcess(processId, stopwatch);
+                }
             }
 
             return responseEntity;

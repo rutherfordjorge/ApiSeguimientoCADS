@@ -81,7 +81,9 @@ namespace ApiSeguimientoCADS.Api.Controllers
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(new { Message = ex.Message });
+                this._logger.EndProcess(processId, stopwatch);
+                this._logger.LogError(ex);
+                return this.BadRequest(new { Message = ex.Message, CorrelationId = correlationId });
             }
             catch (InvalidOperationException ex)
             {
