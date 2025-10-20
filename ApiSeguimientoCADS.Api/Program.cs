@@ -34,6 +34,7 @@ try
 
     // Registrar AppLogger en DI
     builder.Services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
+    builder.Services.AddHealthChecks();
 
     // -----------------------------
     // Configuración de Servicios
@@ -81,6 +82,7 @@ try
     app.UseMiddleware<RequestIdMiddleware>();
     app.UseHttpsRedirection();
     app.UseAuthorization();
+    app.MapHealthChecks("/health");
     app.UseMiddleware<GlobalExceptionMiddleware>();
     app.MapControllers();
 

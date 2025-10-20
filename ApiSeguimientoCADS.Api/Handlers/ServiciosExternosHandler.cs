@@ -4,8 +4,11 @@
 namespace ApiSeguimientoCADS.Api.Handlers
 {
     using ApiSeguimientoCADS.Api.Handlers.Interfaces;
+    using ApiSeguimientoCADS.Api.Helpers;
     using ApiSeguimientoCADS.Api.Models.Enums;
     using ApiSeguimientoCADS.Api.Models.Requests;
+    using ApiSeguimientoCADS.Api.Security.Logger;
+    using System;
     using System.Globalization;
     using System.Text;
     using System.Threading.Tasks;
@@ -15,7 +18,7 @@ namespace ApiSeguimientoCADS.Api.Handlers
     /// </summary>
     public class ServiciosExternosHandler : IServiciosExternosHandler
     {
-        private readonly ILogger<ServiciosExternosHandler> _logger;
+        private readonly IAppLogger<ServiciosExternosHandler> _logger;
         private readonly IConfiguration _configuration;
 
         private static string GenerarTokenSimple(string rutTitular, string sessionId)
@@ -38,9 +41,9 @@ namespace ApiSeguimientoCADS.Api.Handlers
         /// <summary>
         /// ServiciosExternosHandler
         /// </summary>
-        public ServiciosExternosHandler(ILogger<ServiciosExternosHandler> logger, IConfiguration configuration)
+        public ServiciosExternosHandler(IAppLogger<ServiciosExternosHandler> logger, IConfiguration configuration)
         {
-            this._logger = logger;
+            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
@@ -53,28 +56,43 @@ namespace ApiSeguimientoCADS.Api.Handlers
         {
             ArgumentNullException.ThrowIfNull(request);
 
+            var input = new
+            {
+                RutTitular = LogHelper.MaskRut(request.RutTitular ?? string.Empty),
+                Origen = request.Origen.ToString() ?? "None",
+                Rol = request.Rol.ToString() ?? "None",
+            };
+
+            var (processId, stopwatch) = this._logger.StartProcess(input);
+            this._logger.Info("Iniciando validaciones de request");
+
             // Validaciones básicas
             if (string.IsNullOrWhiteSpace(request.RutTitular))
             {
+                this._logger.LogError("Validación fallida: RUT del titular es nulo o vacío");
                 throw new ArgumentException("El RUT del titular es obligatorio.", nameof(request));
             }
 
             if (request.Origen == EOrigen.None)
             {
+                this._logger.LogError($"Validación fallida: Origen inválido ({request.Origen})");
                 throw new ArgumentException("El origen es obligatorio.", nameof(request));
             }
 
             if (request.Rol == ERol.None)
             {
+                this._logger.LogError($"Validación fallida: Rol inválido ({request.Rol})");
                 throw new ArgumentException("El rol es obligatorio.", nameof(request));
             }
 
             // Obtener URL base desde configuración
             var urlBase = this._configuration["Frontend:BaseUrl"]
                 ?? "https://seguimientocads.desa.bciseguros.cl/redirect/";
+            this._logger.Debug($"URL base obtenida de configuración: {urlBase}");
 
             // Generar SessionId único
             var sessionId = Guid.NewGuid().ToString("N");
+            this._logger.Debug($"SessionId generado: {sessionId}");
 
             // Obtener texto del origen
             var origenTexto = request.Origen switch
@@ -87,6 +105,7 @@ namespace ApiSeguimientoCADS.Api.Handlers
 
             // Generar token simple (TODO: implementar JWT real)
             var token = GenerarTokenSimple(request.RutTitular!, sessionId);
+            this._logger.Debug("Token generado exitosamente");
 
             // Construir URL
             var sb = new StringBuilder(urlBase);
@@ -110,6 +129,17 @@ namespace ApiSeguimientoCADS.Api.Handlers
             AppendParam("sessionId", sessionId);
             AppendParam("origenTexto", origenTexto);
             AppendParam("token", token);
+            var urlFinal = sb.ToString();
+
+            this._logger.Info($"URL generada exitosamente. Longitud: {urlFinal.Length} caracteres");
+
+            var output = new
+            {
+                UrlLength = urlFinal.Length,
+                SessionId = sessionId,
+            };
+
+            this._logger.EndProcess(processId, stopwatch, output);
 
             return await Task.FromResult(sb.ToString()).ConfigureAwait(false);
         }
