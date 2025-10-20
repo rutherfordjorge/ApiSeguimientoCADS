@@ -20,10 +20,9 @@ namespace ApiSeguimientoCADS.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/servicios-externos")]
-    public class ServiciosExternosController : Controller
+    public class ServiciosExternosController : BaseApiController<ServiciosExternosController>
     {
         private readonly IServiciosExternosHandler _handler;
-        private readonly IAppLogger<ServiciosExternosController> _logger;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="ServiciosExternosController"/>.
@@ -31,9 +30,9 @@ namespace ApiSeguimientoCADS.Api.Controllers
         /// <param name="handler">Handler de servicios externos.</param>
         /// <param name="logger">Logger de la aplicación.</param>
         public ServiciosExternosController(IServiciosExternosHandler handler, IAppLogger<ServiciosExternosController> logger)
+            : base(logger)
         {
             this._handler = handler ?? throw new ArgumentNullException(nameof(handler));
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -48,48 +47,41 @@ namespace ApiSeguimientoCADS.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Validate([FromForm] ExternalRequest request)
         {
-            var correlationId = this.HttpContext.Items["X-Request-ID"]?.ToString() ?? Guid.NewGuid().ToString();
-
-            this.HttpContext.Items["CorrelationId"] = correlationId;
-
-            // Log de inicio con datos enmascarados
             var logInput = new
             {
                 RutTitular = request?.RutTitular != null ? LogHelper.MaskRut(request.RutTitular) : "null",
                 Origen = request?.Origen.ToString() ?? "null",
                 Rol = request?.Rol.ToString() ?? "null",
-                RequestId = correlationId,
             };
 
-            this._logger.Info($"[POST] /validate - Request recibido");
-            var (processId, stopwatch) = this._logger.StartProcess(logInput);
+            var (correlationId, processId, stopwatch) = this.StartLoggingScope("[POST] /validate - Request recibido", logInput);
             try
             {
                 if (request == null)
                 {
-                    this._logger.LogError("Request es nulo");
-                    this._logger.EndProcess(processId, stopwatch);
+                    this.Logger.LogError("Request es nulo");
+                    this.EndLoggingScope(processId, stopwatch);
                     return this.BadRequest(new { Message = "La solicitud no puede ser nula." });
                 }
 
-                this._logger.Debug("Request validado, delegando al handler");
+                this.Logger.Debug("Request validado, delegando al handler");
                 var urlFrontend = await this._handler.GenerarUrlFrontend(request).ConfigureAwait(false);
 
-                this._logger.Info($"URL generada exitosamente. Redirigiendo al frontend");
-                this._logger.EndProcess(processId, stopwatch);
+                this.Logger.Info("URL generada exitosamente. Redirigiendo al frontend");
+                this.EndLoggingScope(processId, stopwatch);
                 return this.Redirect(urlFrontend);
             }
             catch (ArgumentException ex)
             {
-                this._logger.EndProcess(processId, stopwatch);
-                this._logger.LogError(ex);
+                this.EndLoggingScope(processId, stopwatch);
+                this.Logger.LogError(ex);
                 return this.BadRequest(new { Message = ex.Message, CorrelationId = correlationId });
             }
             catch (InvalidOperationException ex)
             {
-                this._logger.EndProcess(processId, stopwatch);
-                this._logger.LogError(ex);
-                this._logger.LogError($"[POST] /validate - Respuesta 500 InternalServerError");
+                this.EndLoggingScope(processId, stopwatch);
+                this.Logger.LogError(ex);
+                this.Logger.LogError("[POST] /validate - Respuesta 500 InternalServerError");
 
                 return this.StatusCode(
                     StatusCodes.Status500InternalServerError,

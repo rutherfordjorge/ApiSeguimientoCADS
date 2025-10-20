@@ -7,7 +7,7 @@ namespace ApiSeguimientoCADS.Api.Models.Settings
     /// <summary>
     /// Configuración para el API de Siniestros
     /// </summary>
-    public class SiniestrosApiSettings
+    public class SiniestrosApiSettings : IExternalApiSettings
     {
         /// <summary>
         /// URL base del API de siniestros
