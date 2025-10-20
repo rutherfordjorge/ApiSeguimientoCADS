@@ -13,6 +13,7 @@ namespace ApiSeguimientoCADS.Api.Services
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -100,7 +101,7 @@ namespace ApiSeguimientoCADS.Api.Services
         /// con una lista de <see cref="DatosSiniestroDetalleDto"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Se produce si <paramref name="request"/> es <c>null</c>.</exception>
-        public Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request)
+        public Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(request);
 
@@ -131,7 +132,8 @@ namespace ApiSeguimientoCADS.Api.Services
                 $"Iniciando consulta de datos de siniestro. Número: {request.NumeroSiniestro}",
                 $"Preparando request para URL: {this.Settings.Full}",
                 requestBody,
-                (response, total) => new { TotalRegistros = total });
+                (response, total) => new { TotalRegistros = total },
+                cancellationToken: cancellationToken);
         }
     }
 }

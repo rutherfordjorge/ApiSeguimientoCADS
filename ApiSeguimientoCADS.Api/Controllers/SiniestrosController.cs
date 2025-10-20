@@ -66,7 +66,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 async req =>
                 {
                     this.Logger.Debug($"Consultando siniestros para RUT: {req.RutAsegurado}");
-                    return await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(req.RutAsegurado).ConfigureAwait(false);
+                    return await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(req.RutAsegurado, this.HttpContext.RequestAborted).ConfigureAwait(false);
                 },
                 response => new { TotalSiniestros = response.Data?.Count ?? 0 },
                 response =>
@@ -103,7 +103,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 async req =>
                 {
                     this.Logger.Debug($"Consultando datos de siniestro: {req.NumeroSiniestro}");
-                    return await this._datosSiniestroService.ObtenerDatosSiniestroAsync(req).ConfigureAwait(false);
+                    return await this._datosSiniestroService.ObtenerDatosSiniestroAsync(req, this.HttpContext.RequestAborted).ConfigureAwait(false);
                 },
                 response => new { TotalRegistros = response.Data?.Count ?? 0 },
                 response =>

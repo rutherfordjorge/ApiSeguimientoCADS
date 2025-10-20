@@ -6,6 +6,7 @@ namespace ApiSeguimientoCADS.Api.Services.Interfaces
 {
     using ApiSeguimientoCADS.Api.Models.Requests;
     using ApiSeguimientoCADS.Api.Models.Responses;
+    using System.Threading;
 
     /// <summary>
     /// Define el contrato para el servicio de datos de siniestro
@@ -17,6 +18,6 @@ namespace ApiSeguimientoCADS.Api.Services.Interfaces
         /// </summary>
         /// <param name="request">Request con los datos del siniestro</param>
         /// <returns>Datos detallados del siniestro</returns>
-        Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request);
+        Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request, CancellationToken cancellationToken = default);
     }
 }

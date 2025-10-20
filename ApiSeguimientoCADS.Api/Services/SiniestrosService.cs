@@ -11,6 +11,7 @@ namespace ApiSeguimientoCADS.Api.Services
     using Microsoft.Extensions.Options;
     using System.Collections.Generic;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -96,7 +97,7 @@ namespace ApiSeguimientoCADS.Api.Services
         /// Una tarea que representa la operación asíncrona y contiene un <see cref="DefaultResponse{T}"/>
         /// con una lista de <see cref="SiniestroDto"/>.
         /// </returns>
-        public Task<DefaultResponse<List<SiniestroDto>>> ObtenerSiniestrosPorAseguradoAsync(int rutAsegurado)
+        public Task<DefaultResponse<List<SiniestroDto>>> ObtenerSiniestrosPorAseguradoAsync(int rutAsegurado, CancellationToken cancellationToken = default)
         {
             var logInput = new { RutAsegurado = rutAsegurado };
             var requestBody = new { RUTASEGURADO = rutAsegurado };
@@ -106,7 +107,8 @@ namespace ApiSeguimientoCADS.Api.Services
                 $"Iniciando consulta de siniestros para RUT asegurado: {rutAsegurado}",
                 $"Preparando request para URL: {this.Settings.Full}",
                 requestBody,
-                (response, total) => new { TotalSiniestros = total });
+                (response, total) => new { TotalSiniestros = total },
+                cancellationToken: cancellationToken);
         }
     }
 }

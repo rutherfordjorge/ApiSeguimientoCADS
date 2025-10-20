@@ -6,6 +6,7 @@ namespace ApiSeguimientoCADS.Api.Middlewares
 {
     using ApiSeguimientoCADS.Api.Exceptions;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
     using System.Net;
@@ -58,12 +59,7 @@ namespace ApiSeguimientoCADS.Api.Middlewares
 
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var statusCode = exception switch
-            {
-                NotFoundException => (int)HttpStatusCode.NotFound,
-                ValidationException => (int)HttpStatusCode.BadRequest,
-                _ => (int)HttpStatusCode.InternalServerError,
-            };
+            var (statusCode, title, detail) = GetProblemDetailsMetadata(exception);
 
             if (context.Response.HasStarted)
             {
@@ -73,13 +69,23 @@ namespace ApiSeguimientoCADS.Api.Middlewares
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
 
-            var response = new
+            var traceId = context.TraceIdentifier;
+
+            var problemDetails = new ProblemDetails
             {
-                statusCode,
-                message = exception.Message,
+                Title = title,
+                Status = statusCode,
+                Detail = detail,
+                Instance = context.Request?.Path.Value,
             };
 
-            var payload = JsonSerializer.Serialize(response, _serializerOptions);
+            if (!string.IsNullOrEmpty(traceId))
+            {
+                problemDetails.Extensions["traceId"] = traceId;
+                context.Response.Headers["X-Trace-Id"] = traceId;
+            }
+
+            var payload = JsonSerializer.Serialize(problemDetails, _serializerOptions);
             await context.Response.WriteAsync(payload).ConfigureAwait(false);
         }
 
@@ -87,5 +93,15 @@ namespace ApiSeguimientoCADS.Api.Middlewares
             LogLevel.Error,
             new EventId(1, nameof(LogUnhandledException)),
             "Unhandled exception captured by {Middleware}");
+
+        private static (int StatusCode, string Title, string? Detail) GetProblemDetailsMetadata(Exception exception)
+        {
+            return exception switch
+            {
+                NotFoundException notFoundException => ((int)HttpStatusCode.NotFound, "Recurso no encontrado", notFoundException.Message),
+                ValidationException validationException => ((int)HttpStatusCode.BadRequest, "Solicitud inválida", validationException.Message),
+                _ => ((int)HttpStatusCode.InternalServerError, "Error interno del servidor", "Se produjo un error inesperado. Intente nuevamente más tarde."),
+            };
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace ApiSeguimientoCADS.Api.Services
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -71,7 +72,8 @@ namespace ApiSeguimientoCADS.Api.Services
             object requestBody,
             Func<TExternalResponse, int, object?>? metricsFactory = null,
             Func<TExternalResponse, int, string>? successLogMessageFactory = null,
-            Func<TExternalResponse, string>? successMessageFactory = null)
+            Func<TExternalResponse, string>? successMessageFactory = null,
+            CancellationToken cancellationToken = default)
         {
             this.Logger.Info(startInfoMessage);
             var (processId, stopwatch) = this.Logger.StartProcess(logInput);
@@ -82,7 +84,7 @@ namespace ApiSeguimientoCADS.Api.Services
                 var apiRequest = this.CreatePostRequest(requestBody);
                 this.Logger.Debug("Headers agregados. Enviando request al servicio externo...");
 
-                var response = await this._httpClientService.SendAsync<TExternalResponse>(apiRequest).ConfigureAwait(false);
+                var response = await this._httpClientService.SendAsync<TExternalResponse>(apiRequest, cancellationToken).ConfigureAwait(false);
 
                 if (!response.IsSuccess)
                 {
@@ -122,6 +124,12 @@ namespace ApiSeguimientoCADS.Api.Services
 
                 var successMessage = successMessageFactory?.Invoke(externalResponse) ?? this.GetSuccessMessage(externalResponse);
                 return new DefaultResponse<List<TItem>>(true, successMessage, items);
+            }
+            catch (OperationCanceledException)
+            {
+                this.Logger.Info("Operación cancelada por el consumidor.");
+                this.Logger.EndProcess(processId, stopwatch);
+                throw;
             }
             catch (HttpRequestException ex)
             {

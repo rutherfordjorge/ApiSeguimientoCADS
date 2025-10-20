@@ -8,9 +8,11 @@ namespace ApiSeguimientoCADS.Api.Services
     using ApiSeguimientoCADS.Api.Services.Interfaces;
     using ApiSeguimientoCADS.Api.Services.Models;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
     using System.Text.Json;
+    using System.Threading;
 
     /// <summary>
     /// HttpClientService
@@ -37,7 +39,7 @@ namespace ApiSeguimientoCADS.Api.Services
         /// <typeparam name="T">T</typeparam>
         /// <param name="request">ApiRequest</param>
         /// <returns>ApiResponse</returns>
-        public async Task<ApiResponse<T>> SendAsync<T>(ApiRequest request)
+        public async Task<ApiResponse<T>> SendAsync<T>(ApiRequest request, CancellationToken cancellationToken = default)
         {
             var responseEntity = new ApiResponse<T>();
 
@@ -63,23 +65,6 @@ namespace ApiSeguimientoCADS.Api.Services
 
                 using var httpRequest = new HttpRequestMessage(request.Method, request.Url);
 
-                this._http.DefaultRequestHeaders.Clear();
-                if (request.Headers != null)
-                {
-                    foreach (var header in request.Headers)
-                    {
-                        this._http.DefaultRequestHeaders.Add(header.Key, header.Value);
-                    }
-
-                    this._logger.Debug($"Headers agregados: {request.Headers.Count}");
-                }
-
-                if (!string.IsNullOrWhiteSpace(request.BearerToken))
-                {
-                    this._http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.BearerToken);
-                    this._logger.Debug("Token Bearer agregado");
-                }
-
                 if (request.Body != null && (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put || request.Method == HttpMethod.Patch))
                 {
                     var json = JsonSerializer.Serialize(request.Body);
@@ -87,8 +72,27 @@ namespace ApiSeguimientoCADS.Api.Services
                     this._logger.Debug($"Body serializado: {json.Length} caracteres");
                 }
 
-                var result = await this._http.SendAsync(httpRequest).ConfigureAwait(false);
-                var jsonResponse = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(request.BearerToken))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", request.BearerToken);
+                    this._logger.Debug("Token Bearer agregado");
+                }
+
+                if (request.Headers != null && request.Headers.Count > 0)
+                {
+                    foreach (var header in request.Headers)
+                    {
+                        if (!httpRequest.Headers.TryAddWithoutValidation(header.Key, header.Value))
+                        {
+                            httpRequest.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                        }
+                    }
+
+                    this._logger.Debug($"Headers agregados: {request.Headers.Count}");
+                }
+
+                var result = await this._http.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+                var jsonResponse = await result.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
                 responseEntity.StatusCode = result.StatusCode;
                 responseEntity.RawResponse = jsonResponse;
@@ -118,6 +122,15 @@ namespace ApiSeguimientoCADS.Api.Services
                 {
                     this._logger.EndProcess(processId, stopwatch);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                this._logger.Info("Solicitud HTTP cancelada por el consumidor.");
+                if (stopwatch != null && processId != Guid.Empty)
+                {
+                    this._logger.EndProcess(processId, stopwatch);
+                }
+                throw;
             }
 
             return responseEntity;
