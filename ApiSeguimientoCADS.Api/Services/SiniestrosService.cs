@@ -6,7 +6,7 @@ namespace ApiSeguimientoCADS.Api.Services
 {
     using ApiSeguimientoCADS.Api.Models.Responses;
     using ApiSeguimientoCADS.Api.Models.Settings;
-    using ApiSeguimientoCADS.Api.Security;
+    using ApiSeguimientoCADS.Api.Security.Logger;
     using ApiSeguimientoCADS.Api.Services.Interfaces;
     using ApiSeguimientoCADS.Api.Services.Models;
     using Microsoft.Extensions.Options;
@@ -46,10 +46,10 @@ namespace ApiSeguimientoCADS.Api.Services
             try
             {
                 // Preparar el request
-                this._logger.Debug($"Preparando request para URL: {this._settings.FullUrl}");
+                this._logger.Debug($"Preparando request para URL: {this._settings.Full}");
                 var apiRequest = new ApiRequest
                 {
-                    Url = new Uri(this._settings.FullUrl),
+                    Url = new Uri(this._settings.Full),
                     Method = HttpMethod.Post,
                     Body = new { RUTASEGURADO = rutAsegurado },
                 };
@@ -62,7 +62,7 @@ namespace ApiSeguimientoCADS.Api.Services
                 this._logger.Debug("Headers agregados. Enviando request al servicio externo...");
 
                 // Realizar la llamada al servicio externo
-                var response = await this._httpClientService.SendAsync<SiniestrosExternalResponse>(apiRequest);
+                var response = await this._httpClientService.SendAsync<SiniestrosExternalResponse>(apiRequest).ConfigureAwait(false);
 
                 // Validar respuesta
                 if (!response.IsSuccess)
@@ -105,21 +105,34 @@ namespace ApiSeguimientoCADS.Api.Services
                 var result = new DefaultResponse<List<SiniestroDto>>(
                     success: true,
                     message: response.Data.Comentario ?? "Siniestros obtenidos exitosamente",
-                    data: response.Data.Data ?? new List<SiniestroDto>());
+                    data: response.Data.Data?.ToList() ?? new List<SiniestroDto>());
 
                 this._logger.EndProcess(processId, stopwatch, new { TotalSiniestros = totalSiniestros });
                 return result;
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 this._logger.LogError(ex);
-                this._logger.LogError($"Excepción al consultar siniestros: {ex.Message}");
+                this._logger.LogError($"Error de red al consultar siniestros: {ex.Message}");
                 this._logger.EndProcess(processId, stopwatch);
+
                 return new DefaultResponse<List<SiniestroDto>>(
                     success: false,
-                    message: "Error interno al consultar siniestros",
+                    message: "Error de comunicación con el servicio externo",
                     data: null,
-                    errorCode: "INTERNAL_ERROR");
+                    errorCode: "NETWORK_ERROR");
+            }
+            catch (InvalidOperationException ex)
+            {
+                this._logger.LogError(ex);
+                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
+                this._logger.EndProcess(processId, stopwatch);
+
+                return new DefaultResponse<List<SiniestroDto>>(
+                    success: false,
+                    message: "Error al procesar la solicitud",
+                    data: null,
+                    errorCode: "OPERATION_ERROR");
             }
         }
     }

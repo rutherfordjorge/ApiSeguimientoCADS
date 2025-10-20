@@ -12,7 +12,7 @@ namespace ApiSeguimientoCADS.Api.Models.Settings
         /// <summary>
         /// URL base del API de datos de siniestro
         /// </summary>
-        public string BaseUrl { get; set; } = string.Empty;
+        public string Base { get; set; } = string.Empty;
 
         /// <summary>
         /// Endpoint para obtener datos detallados de un siniestro
@@ -32,6 +32,6 @@ namespace ApiSeguimientoCADS.Api.Models.Settings
         /// <summary>
         /// URL completa del endpoint
         /// </summary>
-        public string FullUrl => $"{this.BaseUrl}{this.Endpoint}";
+        public string Full => $"{this.Full}{this.Endpoint}";
     }
 }

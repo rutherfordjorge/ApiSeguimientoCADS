@@ -7,7 +7,7 @@ namespace ApiSeguimientoCADS.Api.Services
     using ApiSeguimientoCADS.Api.Models.Requests;
     using ApiSeguimientoCADS.Api.Models.Responses;
     using ApiSeguimientoCADS.Api.Models.Settings;
-    using ApiSeguimientoCADS.Api.Security;
+    using ApiSeguimientoCADS.Api.Security.Logger;
     using ApiSeguimientoCADS.Api.Services.Interfaces;
     using ApiSeguimientoCADS.Api.Services.Models;
     using Microsoft.Extensions.Options;
@@ -40,6 +40,8 @@ namespace ApiSeguimientoCADS.Api.Services
         /// <inheritdoc/>
         public async Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             var logInput = new
             {
                 request.NumeroSiniestro,
@@ -68,12 +70,12 @@ namespace ApiSeguimientoCADS.Api.Services
                     i_Patent = request.Patente ?? string.Empty,
                 };
 
-                this._logger.Debug($"Preparando request para URL: {this._settings.FullUrl}");
+                this._logger.Debug($"Preparando request para URL: {this._settings.Full}");
 
                 // Preparar el request
                 var apiRequest = new ApiRequest
                 {
-                    Url = new Uri(this._settings.FullUrl),
+                    Url = new Uri(this._settings.Full),
                     Method = HttpMethod.Post,
                     Body = requestBody,
                 };
@@ -86,7 +88,7 @@ namespace ApiSeguimientoCADS.Api.Services
                 this._logger.Debug("Headers agregados. Enviando request al servicio externo...");
 
                 // Realizar la llamada al servicio externo
-                var response = await this._httpClientService.SendAsync<DatosSiniestroExternalResponse>(apiRequest);
+                var response = await this._httpClientService.SendAsync<DatosSiniestroExternalResponse>(apiRequest).ConfigureAwait(false);
 
                 // Validar respuesta
                 if (!response.IsSuccess)
@@ -127,14 +129,14 @@ namespace ApiSeguimientoCADS.Api.Services
                 this._logger.Info($"Datos de siniestro obtenidos exitosamente. Total registros: {totalRegistros}");
 
                 var result = new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                    success: true,
-                    message: response.Data.Comentario ?? "Datos de siniestro obtenidos exitosamente",
-                    data: response.Data.Data ?? new List<DatosSiniestroDetalleDto>());
+                        success: true,
+                        message: response.Data.Comentario ?? "Datos de siniestro obtenidos exitosamente",
+                        data: response.Data.Data?.ToList() ?? new List<DatosSiniestroDetalleDto>());
 
                 this._logger.EndProcess(processId, stopwatch, new { TotalRegistros = totalRegistros });
                 return result;
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 this._logger.LogError(ex);
                 this._logger.LogError($"Excepción al consultar datos de siniestro: {ex.Message}");
@@ -144,6 +146,18 @@ namespace ApiSeguimientoCADS.Api.Services
                     message: "Error interno al consultar datos de siniestro",
                     data: null,
                     errorCode: "INTERNAL_ERROR");
+            }
+            catch (InvalidOperationException ex)
+            {
+                this._logger.LogError(ex);
+                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
+                this._logger.EndProcess(processId, stopwatch);
+
+                return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
+                    success: false,
+                    message: "Error al procesar la solicitud",
+                    data: null,
+                    errorCode: "OPERATION_ERROR");
             }
         }
     }

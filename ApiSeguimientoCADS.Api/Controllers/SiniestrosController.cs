@@ -6,11 +6,12 @@ namespace ApiSeguimientoCADS.Api.Controllers
 {
     using ApiSeguimientoCADS.Api.Models.Requests;
     using ApiSeguimientoCADS.Api.Models.Responses;
-    using ApiSeguimientoCADS.Api.Security;
+    using ApiSeguimientoCADS.Api.Security.Logger;
     using ApiSeguimientoCADS.Api.Services.Interfaces;
     using Asp.Versioning;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Globalization;
 
     /// <summary>
     /// Controlador para gestionar operaciones relacionadas con siniestros
@@ -52,12 +53,14 @@ namespace ApiSeguimientoCADS.Api.Controllers
         [ProducesResponseType(typeof(DefaultResponse<List<SiniestroDto>>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerSiniestrosPorAsegurado([FromBody] SiniestrosRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             var correlationId = this.HttpContext.Items["X-Request-ID"]?.ToString() ?? Guid.NewGuid().ToString();
             this.HttpContext.Items["CorrelationId"] = correlationId;
 
             var logInput = new
             {
-                RutAsegurado = request?.RutAsegurado.ToString() ?? "null",
+                RutAsegurado = request?.RutAsegurado.ToString(CultureInfo.InvariantCulture) ?? "null",
                 RequestId = correlationId,
             };
 
@@ -92,7 +95,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 }
 
                 this._logger.Debug($"Consultando siniestros para RUT: {request.RutAsegurado}");
-                var response = await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(request.RutAsegurado);
+                var response = await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(request.RutAsegurado).ConfigureAwait(false);
 
                 this._logger.EndProcess(processId, stopwatch);
 
@@ -105,20 +108,19 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 this._logger.Info($"Siniestros obtenidos exitosamente. Total: {response.Data?.Count ?? 0}");
                 return this.Ok(response);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                this._logger.EndProcess(processId, stopwatch);
                 this._logger.LogError(ex);
-                this._logger.LogError($"Excepción al obtener siniestros: {ex.Message}");
+                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
+                this._logger.EndProcess(processId, stopwatch);
 
                 var errorResponse = new DefaultResponse<List<SiniestroDto>>(
                     success: false,
-                    message: "Error interno del servidor",
-                    errorCode: "INTERNAL_SERVER_ERROR");
+                    message: "Error al procesar la solicitud",
+                    data: null,
+                    errorCode: "OPERATION_ERROR");
 
-                return this.StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    errorResponse);
+                return this.BadRequest(errorResponse);
             }
         }
 
@@ -134,14 +136,16 @@ namespace ApiSeguimientoCADS.Api.Controllers
         [ProducesResponseType(typeof(DefaultResponse<List<DatosSiniestroDetalleDto>>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerDatosSiniestro([FromBody] DatosSiniestroRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             var correlationId = this.HttpContext.Items["X-Request-ID"]?.ToString() ?? Guid.NewGuid().ToString();
             this.HttpContext.Items["CorrelationId"] = correlationId;
 
             var logInput = new
             {
-                NumeroSiniestro = request?.NumeroSiniestro.ToString() ?? "null",
-                NumeroRiesgo = request?.NumeroRiesgo.ToString() ?? "null",
-                NumeroItem = request?.NumeroItem.ToString() ?? "null",
+                NumeroSiniestro = request?.NumeroSiniestro.ToString(CultureInfo.InvariantCulture) ?? "null",
+                NumeroRiesgo = request?.NumeroRiesgo.ToString(CultureInfo.InvariantCulture) ?? "null",
+                NumeroItem = request?.NumeroItem.ToString(CultureInfo.InvariantCulture) ?? "null",
                 RequestId = correlationId,
             };
 
@@ -176,7 +180,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 }
 
                 this._logger.Debug($"Consultando datos de siniestro: {request.NumeroSiniestro}");
-                var response = await this._datosSiniestroService.ObtenerDatosSiniestroAsync(request);
+                var response = await this._datosSiniestroService.ObtenerDatosSiniestroAsync(request).ConfigureAwait(false);
 
                 this._logger.EndProcess(processId, stopwatch);
 
@@ -189,20 +193,19 @@ namespace ApiSeguimientoCADS.Api.Controllers
                 this._logger.Info($"Datos de siniestro obtenidos exitosamente. Total registros: {response.Data?.Count ?? 0}");
                 return this.Ok(response);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                this._logger.EndProcess(processId, stopwatch);
                 this._logger.LogError(ex);
-                this._logger.LogError($"Excepción al obtener datos de siniestro: {ex.Message}");
+                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
+                this._logger.EndProcess(processId, stopwatch);
 
-                var errorResponse = new DefaultResponse<List<DatosSiniestroDetalleDto>>(
+                var errorResponse = new DefaultResponse<List<SiniestroDto>>(
                     success: false,
-                    message: "Error interno del servidor",
-                    errorCode: "INTERNAL_SERVER_ERROR");
+                    message: "Error al procesar la solicitud",
+                    data: null,
+                    errorCode: "OPERATION_ERROR");
 
-                return this.StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    errorResponse);
+                return this.BadRequest(errorResponse);
             }
         }
     }
