@@ -5,7 +5,6 @@
 using ApiSeguimientoCADS.Api.Configuration;
 using ApiSeguimientoCADS.Api.Handlers;
 using ApiSeguimientoCADS.Api.Handlers.Interfaces;
-using ApiSeguimientoCADS.Api.Infrastructure.Repositories;
 using ApiSeguimientoCADS.Api.Middlewares;
 using ApiSeguimientoCADS.Api.Security.Logger;
 using ApiSeguimientoCADS.Api.Services;
@@ -58,7 +57,6 @@ try
 
     // Servicios de la aplicación
     builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
-    builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
     builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
 
     // -----------------------------

@@ -16,40 +16,82 @@ namespace ApiSeguimientoCADS.Api.Handlers
     public class ServiciosExternosHandler : IServiciosExternosHandler
     {
         private readonly ILogger<ServiciosExternosHandler> _logger;
+        private readonly IConfiguration _configuration;
+
+        private static string GenerarTokenSimple(string rutTitular, string sessionId)
+        {
+            var data = $"{rutTitular}|{sessionId}|{DateTime.UtcNow:yyyyMMddHHmmss}";
+            var hash = System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(data));
+            return Convert.ToBase64String(hash);
+        }
+
+        private static string NormalizarRuta(string? ruta)
+        {
+            if (string.IsNullOrWhiteSpace(ruta))
+            {
+                return "-";
+            }
+
+            return ruta.Replace("/", "|", StringComparison.Ordinal);
+        }
 
         /// <summary>
         /// ServiciosExternosHandler
         /// </summary>
-        public ServiciosExternosHandler(ILogger<ServiciosExternosHandler> logger)
+        public ServiciosExternosHandler(ILogger<ServiciosExternosHandler> logger, IConfiguration configuration)
         {
             this._logger = logger;
+            this._configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /// <summary>
-        /// GenerarUrlFrontend
+        /// Genera URL del frontend con los parámetros de redirección.
         /// </summary>
-        /// <returns>Url componente front</returns>
+        /// <param name="request">Datos de la solicitud.</param>
+        /// <returns>URL completa para redirección.</returns>
         public async Task<string> GenerarUrlFrontend(ExternalRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            var sessionId = Guid.NewGuid().ToString();
+            // Validaciones básicas
+            if (string.IsNullOrWhiteSpace(request.RutTitular))
+            {
+                throw new ArgumentException("El RUT del titular es obligatorio.", nameof(request));
+            }
 
+            if (request.Origen == EOrigen.None)
+            {
+                throw new ArgumentException("El origen es obligatorio.", nameof(request));
+            }
+
+            if (request.Rol == ERol.None)
+            {
+                throw new ArgumentException("El rol es obligatorio.", nameof(request));
+            }
+
+            // Obtener URL base desde configuración
+            var urlBase = this._configuration["Frontend:BaseUrl"]
+                ?? "https://seguimientocads.desa.bciseguros.cl/redirect/";
+
+            // Generar SessionId único
+            var sessionId = Guid.NewGuid().ToString("N");
+
+            // Obtener texto del origen
             var origenTexto = request.Origen switch
             {
                 EOrigen.Web => "SITIO PRIVADO",
                 EOrigen.App => "APP",
                 EOrigen.Ofv => "OFICINA VIRTUAL",
-                _ => "Origen desconocido",
+                _ => "DESCONOCIDO",
             };
 
-            // 3) Generar Token
+            // Generar token simple (TODO: implementar JWT real)
+            var token = GenerarTokenSimple(request.RutTitular!, sessionId);
 
-            // 4) Construcción de URL
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Url Base a donde vamos a redirigir ej: \"https://seguimientocads.desa.bciseguros.cl/redirect/\"");
+            // Construir URL
+            var sb = new StringBuilder(urlBase);
+            char sep = urlBase.Contains('?', StringComparison.Ordinal) ? '&' : '?';
 
-            char sep = '?';
             void AppendParam(string key, string? value)
             {
                 sb.Append(sep);
@@ -62,18 +104,14 @@ namespace ApiSeguimientoCADS.Api.Handlers
             AppendParam("titular", request.RutTitular);
             AppendParam("origen", ((int)request.Origen).ToString(CultureInfo.InvariantCulture));
             AppendParam("corredor", request.RutCorredor);
-            AppendParam("origen", ((int)request.Rol).ToString(CultureInfo.InvariantCulture));
-            AppendParam("urlOrigen", string.IsNullOrEmpty(request.RutaOrigen) ? "-" : request.RutaOrigen.Replace("/", "|", StringComparison.Ordinal));
-            AppendParam("urlDestino", string.IsNullOrEmpty(request.RutaDestino) ? "-" : request.RutaDestino.Replace("/", "|", StringComparison.Ordinal));
-            AppendParam("sessionId", "sessionId");
-            AppendParam("idUsuario", "Id_usuario");
-            AppendParam("nombres", "nombre_usuario");
-            AppendParam("apellidos", "apellido_usuario");
-            AppendParam("email", "email_usuario");
+            AppendParam("rol", ((int)request.Rol).ToString(CultureInfo.InvariantCulture));
+            AppendParam("urlOrigen", NormalizarRuta(request.RutaOrigen));
+            AppendParam("urlDestino", NormalizarRuta(request.RutaDestino));
+            AppendParam("sessionId", sessionId);
             AppendParam("origenTexto", origenTexto);
-            AppendParam("token", "token_nuestro");
+            AppendParam("token", token);
 
-            return await Task.FromResult("url").ConfigureAwait(false);
+            return await Task.FromResult(sb.ToString()).ConfigureAwait(false);
         }
     }
 }

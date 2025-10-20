@@ -28,4 +28,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\Entities\" />
+    <Folder Include="Infrastructure\Repositories\" />
+  </ItemGroup>
 </Project>
