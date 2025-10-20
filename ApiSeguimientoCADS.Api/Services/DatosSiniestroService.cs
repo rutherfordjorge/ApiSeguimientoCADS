@@ -9,36 +9,44 @@ namespace ApiSeguimientoCADS.Api.Services
     using ApiSeguimientoCADS.Api.Models.Settings;
     using ApiSeguimientoCADS.Api.Security.Logger;
     using ApiSeguimientoCADS.Api.Services.Interfaces;
-    using ApiSeguimientoCADS.Api.Services.Models;
     using Microsoft.Extensions.Options;
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Servicio para consumir el API de datos de siniestro de BCI
     /// </summary>
-    public class DatosSiniestroService : IDatosSiniestroService
+    public class DatosSiniestroService : ExternalApiServiceBase<DatosSiniestroService, DatosSiniestroApiSettings, DatosSiniestroExternalResponse, DatosSiniestroDetalleDto>, IDatosSiniestroService
     {
-        private readonly IHttpClientService _httpClientService;
-        private readonly DatosSiniestroApiSettings _settings;
-        private readonly IAppLogger<DatosSiniestroService> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatosSiniestroService"/> class.
-        /// </summary>
-        /// <param name="httpClientService">Servicio HTTP para consumir APIs externas</param>
-        /// <param name="settings">Configuración del API de datos de siniestro</param>
-        /// <param name="logger">Logger para registrar eventos</param>
         public DatosSiniestroService(
             IHttpClientService httpClientService,
             IOptions<DatosSiniestroApiSettings> settings,
             IAppLogger<DatosSiniestroService> logger)
+            : base(httpClientService, settings, logger)
         {
-            this._httpClientService = httpClientService ?? throw new ArgumentNullException(nameof(httpClientService));
-            this._settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <inheritdoc/>
-        public async Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request)
+        protected override string OperationDisplayName => "datos de siniestro";
+
+        protected override object CreateDefaultMetrics(int totalItems) => new { TotalRegistros = totalItems };
+
+        protected override string GetSuccessLogMessage(DatosSiniestroExternalResponse externalResponse, int totalItems) => $"Datos de siniestro obtenidos exitosamente. Total registros: {totalItems}";
+
+        protected override string SuccessMessageFallback => "Datos de siniestro obtenidos exitosamente";
+
+        protected override string GetHttpErrorMessage(HttpStatusCode statusCode) => $"Error al consultar datos de siniestro: {statusCode}";
+
+        protected override string StatusErrorFallbackMessage => "Error en el servicio externo de datos de siniestro";
+
+        protected override string NetworkErrorMessage => "Error interno al consultar datos de siniestro";
+
+        protected override string NetworkErrorCode => "INTERNAL_ERROR";
+
+        protected override string OperationErrorMessage => "Error al procesar la solicitud";
+
+        public Task<DefaultResponse<List<DatosSiniestroDetalleDto>>> ObtenerDatosSiniestroAsync(DatosSiniestroRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
 
@@ -53,112 +61,23 @@ namespace ApiSeguimientoCADS.Api.Services
                 request.Patente,
             };
 
-            this._logger.Info($"Iniciando consulta de datos de siniestro. Número: {request.NumeroSiniestro}");
-            var (processId, stopwatch) = this._logger.StartProcess(logInput);
-
-            try
+            var requestBody = new
             {
-                // Preparar el request body según el formato del API externo
-                var requestBody = new
-                {
-                    i_Nsinie = request.NumeroSiniestro,
-                    i_Nriesg = request.NumeroRiesgo,
-                    i_Nitem = request.NumeroItem,
-                    i_Csucur = request.CodigoSucursal,
-                    i_Ctpdoc = request.CodigoTipoDocumento,
-                    i_Ndocto = request.NumeroDocumento,
-                    i_Patent = request.Patente ?? string.Empty,
-                };
+                i_Nsinie = request.NumeroSiniestro,
+                i_Nriesg = request.NumeroRiesgo,
+                i_Nitem = request.NumeroItem,
+                i_Csucur = request.CodigoSucursal,
+                i_Ctpdoc = request.CodigoTipoDocumento,
+                i_Ndocto = request.NumeroDocumento,
+                i_Patent = request.Patente ?? string.Empty,
+            };
 
-                this._logger.Debug($"Preparando request para URL: {this._settings.Full}");
-
-                // Preparar el request
-                var apiRequest = new ApiRequest
-                {
-                    Url = new Uri(this._settings.Full),
-                    Method = HttpMethod.Post,
-                    Body = requestBody,
-                };
-
-                // Agregar headers requeridos
-                apiRequest.Headers["Content-Type"] = "application/json";
-                apiRequest.Headers["Authorization"] = this._settings.AuthToken;
-                apiRequest.Headers["Cookie"] = this._settings.Cookie;
-
-                this._logger.Debug("Headers agregados. Enviando request al servicio externo...");
-
-                // Realizar la llamada al servicio externo
-                var response = await this._httpClientService.SendAsync<DatosSiniestroExternalResponse>(apiRequest).ConfigureAwait(false);
-
-                // Validar respuesta
-                if (!response.IsSuccess)
-                {
-                    this._logger.LogError($"Error al consultar datos de siniestro. StatusCode: {response.StatusCode}");
-                    this._logger.EndProcess(processId, stopwatch);
-                    return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: false,
-                        message: $"Error al consultar datos de siniestro: {response.StatusCode}",
-                        data: null,
-                        errorCode: response.StatusCode.ToString());
-                }
-
-                if (response.Data == null)
-                {
-                    this._logger.LogError("La respuesta del servicio externo no contiene datos");
-                    this._logger.EndProcess(processId, stopwatch);
-                    return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: false,
-                        message: "No se recibieron datos del servicio externo",
-                        data: null,
-                        errorCode: "NO_DATA");
-                }
-
-                // Validar el status de la respuesta externa
-                if (response.Data.Status != "200")
-                {
-                    this._logger.LogError($"El servicio externo retornó status: {response.Data.Status} - {response.Data.Comentario}");
-                    this._logger.EndProcess(processId, stopwatch);
-                    return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: false,
-                        message: response.Data.Comentario ?? "Error en el servicio externo",
-                        data: null,
-                        errorCode: response.Data.Status);
-                }
-
-                var totalRegistros = response.Data.Data?.Count ?? 0;
-                this._logger.Info($"Datos de siniestro obtenidos exitosamente. Total registros: {totalRegistros}");
-
-                var result = new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: true,
-                        message: response.Data.Comentario ?? "Datos de siniestro obtenidos exitosamente",
-                        data: response.Data.Data?.ToList() ?? new List<DatosSiniestroDetalleDto>());
-
-                this._logger.EndProcess(processId, stopwatch, new { TotalRegistros = totalRegistros });
-                return result;
-            }
-            catch (HttpRequestException ex)
-            {
-                this._logger.LogError(ex);
-                this._logger.LogError($"Excepción al consultar datos de siniestro: {ex.Message}");
-                this._logger.EndProcess(processId, stopwatch);
-                return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                    success: false,
-                    message: "Error interno al consultar datos de siniestro",
-                    data: null,
-                    errorCode: "INTERNAL_ERROR");
-            }
-            catch (InvalidOperationException ex)
-            {
-                this._logger.LogError(ex);
-                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
-                this._logger.EndProcess(processId, stopwatch);
-
-                return new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                    success: false,
-                    message: "Error al procesar la solicitud",
-                    data: null,
-                    errorCode: "OPERATION_ERROR");
-            }
+            return this.ExecuteAsync(
+                logInput,
+                $"Iniciando consulta de datos de siniestro. Número: {request.NumeroSiniestro}",
+                $"Preparando request para URL: {this.Settings.Full}",
+                requestBody,
+                (response, total) => new { TotalRegistros = total });
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ApiSeguimientoCADS.Api.Models.Settings
     /// <summary>
     /// Configuración para el API de Datos de Siniestro
     /// </summary>
-    public class DatosSiniestroApiSettings
+    public class DatosSiniestroApiSettings : IExternalApiSettings
     {
         /// <summary>
         /// URL base del API de datos de siniestro
@@ -32,6 +32,6 @@ namespace ApiSeguimientoCADS.Api.Models.Settings
         /// <summary>
         /// URL completa del endpoint
         /// </summary>
-        public string Full => $"{this.Full}{this.Endpoint}";
+        public string Full => $"{this.Base}{this.Endpoint}";
     }
 }

@@ -4,12 +4,14 @@
 
 namespace ApiSeguimientoCADS.Api.Models.Responses
 {
+    using System;
+    using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
     /// <summary>
     /// Respuesta externa del endpoint de datos de siniestro de BCI
     /// </summary>
-    public class DatosSiniestroExternalResponse
+    public class DatosSiniestroExternalResponse : IExternalServiceResponse<DatosSiniestroDetalleDto>
     {
         /// <summary>
         /// Estado de la respuesta
@@ -34,6 +36,6 @@ namespace ApiSeguimientoCADS.Api.Models.Responses
         /// </summary>
         [JsonPropertyName("data")]
 
-        public IReadOnlyList<DatosSiniestroDetalleDto> Data { get; set; } = Array.Empty<DatosSiniestroDetalleDto>();
+        public IReadOnlyList<DatosSiniestroDetalleDto>? Data { get; set; } = Array.Empty<DatosSiniestroDetalleDto>();
     }
 }

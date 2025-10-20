@@ -11,7 +11,10 @@ namespace ApiSeguimientoCADS.Api.Controllers
     using Asp.Versioning;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Controlador para gestionar operaciones relacionadas con siniestros
@@ -19,11 +22,10 @@ namespace ApiSeguimientoCADS.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/siniestros")]
-    public class SiniestrosController : ControllerBase
+    public class SiniestrosController : BaseApiController<SiniestrosController>
     {
         private readonly ISiniestrosService _siniestrosService;
         private readonly IDatosSiniestroService _datosSiniestroService;
-        private readonly IAppLogger<SiniestrosController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SiniestrosController"/> class.
@@ -35,10 +37,10 @@ namespace ApiSeguimientoCADS.Api.Controllers
             ISiniestrosService siniestrosService,
             IDatosSiniestroService datosSiniestroService,
             IAppLogger<SiniestrosController> logger)
+            : base(logger)
         {
             this._siniestrosService = siniestrosService ?? throw new ArgumentNullException(nameof(siniestrosService));
             this._datosSiniestroService = datosSiniestroService ?? throw new ArgumentNullException(nameof(datosSiniestroService));
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -53,75 +55,27 @@ namespace ApiSeguimientoCADS.Api.Controllers
         [ProducesResponseType(typeof(DefaultResponse<List<SiniestroDto>>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerSiniestrosPorAsegurado([FromBody] SiniestrosRequest request)
         {
-            ArgumentNullException.ThrowIfNull(request);
-
-            var correlationId = this.HttpContext.Items["X-Request-ID"]?.ToString() ?? Guid.NewGuid().ToString();
-            this.HttpContext.Items["CorrelationId"] = correlationId;
-
-            var logInput = new
-            {
-                RutAsegurado = request?.RutAsegurado.ToString(CultureInfo.InvariantCulture) ?? "null",
-                RequestId = correlationId,
-            };
-
-            this._logger.Info($"[POST] /siniestros/por-asegurado - Request recibido");
-            var (processId, stopwatch) = this._logger.StartProcess(logInput);
-
-            try
-            {
-                if (request == null)
+            return await this.ExecuteDefaultResponseAsync<SiniestrosRequest, List<SiniestroDto>>(
+                request,
+                req => new
                 {
-                    this._logger.LogError("Request es nulo");
-                    this._logger.EndProcess(processId, stopwatch);
-                    var errorResponse = new DefaultResponse<List<SiniestroDto>>(
-                        success: false,
-                        message: "La solicitud no puede ser nula.",
-                        errorCode: "NULL_REQUEST");
-                    return this.BadRequest(errorResponse);
-                }
-
-                if (!this.ModelState.IsValid)
+                    RutAsegurado = req?.RutAsegurado.ToString(CultureInfo.InvariantCulture) ?? "null",
+                    RequestId = this.HttpContext.Items["CorrelationId"]?.ToString() ?? string.Empty,
+                },
+                "[POST] /siniestros/por-asegurado - Request recibido",
+                async req =>
                 {
-                    this._logger.LogError("Request inválido: ModelState tiene errores");
-                    this._logger.EndProcess(processId, stopwatch);
-                    var errors = string.Join(", ", this.ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage));
-                    var validationErrorResponse = new DefaultResponse<List<SiniestroDto>>(
-                        success: false,
-                        message: $"Errores de validación: {errors}",
-                        errorCode: "VALIDATION_ERROR");
-                    return this.BadRequest(validationErrorResponse);
-                }
-
-                this._logger.Debug($"Consultando siniestros para RUT: {request.RutAsegurado}");
-                var response = await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(request.RutAsegurado).ConfigureAwait(false);
-
-                this._logger.EndProcess(processId, stopwatch);
-
-                if (!response.Success)
+                    this.Logger.Debug($"Consultando siniestros para RUT: {req.RutAsegurado}");
+                    return await this._siniestrosService.ObtenerSiniestrosPorAseguradoAsync(req.RutAsegurado).ConfigureAwait(false);
+                },
+                response => new { TotalSiniestros = response.Data?.Count ?? 0 },
+                response =>
                 {
-                    this._logger.Info($"No se pudieron obtener siniestros: {response.Message}");
+                    this.Logger.Info($"No se pudieron obtener siniestros: {response.Message}");
                     return this.BadRequest(response);
-                }
-
-                this._logger.Info($"Siniestros obtenidos exitosamente. Total: {response.Data?.Count ?? 0}");
-                return this.Ok(response);
-            }
-            catch (InvalidOperationException ex)
-            {
-                this._logger.LogError(ex);
-                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
-                this._logger.EndProcess(processId, stopwatch);
-
-                var errorResponse = new DefaultResponse<List<SiniestroDto>>(
-                    success: false,
-                    message: "Error al procesar la solicitud",
-                    data: null,
-                    errorCode: "OPERATION_ERROR");
-
-                return this.BadRequest(errorResponse);
-            }
+                },
+                response => this.Logger.Info($"Siniestros obtenidos exitosamente. Total: {response.Data?.Count ?? 0}"))
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -136,77 +90,29 @@ namespace ApiSeguimientoCADS.Api.Controllers
         [ProducesResponseType(typeof(DefaultResponse<List<DatosSiniestroDetalleDto>>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerDatosSiniestro([FromBody] DatosSiniestroRequest request)
         {
-            ArgumentNullException.ThrowIfNull(request);
-
-            var correlationId = this.HttpContext.Items["X-Request-ID"]?.ToString() ?? Guid.NewGuid().ToString();
-            this.HttpContext.Items["CorrelationId"] = correlationId;
-
-            var logInput = new
-            {
-                NumeroSiniestro = request?.NumeroSiniestro.ToString(CultureInfo.InvariantCulture) ?? "null",
-                NumeroRiesgo = request?.NumeroRiesgo.ToString(CultureInfo.InvariantCulture) ?? "null",
-                NumeroItem = request?.NumeroItem.ToString(CultureInfo.InvariantCulture) ?? "null",
-                RequestId = correlationId,
-            };
-
-            this._logger.Info($"[POST] /siniestros/datos-detalle - Request recibido");
-            var (processId, stopwatch) = this._logger.StartProcess(logInput);
-
-            try
-            {
-                if (request == null)
+            return await this.ExecuteDefaultResponseAsync<DatosSiniestroRequest, List<DatosSiniestroDetalleDto>>(
+                request,
+                req => new
                 {
-                    this._logger.LogError("Request es nulo");
-                    this._logger.EndProcess(processId, stopwatch);
-                    var errorResponse = new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: false,
-                        message: "La solicitud no puede ser nula.",
-                        errorCode: "NULL_REQUEST");
-                    return this.BadRequest(errorResponse);
-                }
-
-                if (!this.ModelState.IsValid)
+                    NumeroSiniestro = req?.NumeroSiniestro.ToString(CultureInfo.InvariantCulture) ?? "null",
+                    NumeroRiesgo = req?.NumeroRiesgo.ToString(CultureInfo.InvariantCulture) ?? "null",
+                    NumeroItem = req?.NumeroItem.ToString(CultureInfo.InvariantCulture) ?? "null",
+                    RequestId = this.HttpContext.Items["CorrelationId"]?.ToString() ?? string.Empty,
+                },
+                "[POST] /siniestros/datos-detalle - Request recibido",
+                async req =>
                 {
-                    this._logger.LogError("Request inválido: ModelState tiene errores");
-                    this._logger.EndProcess(processId, stopwatch);
-                    var errors = string.Join(", ", this.ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage));
-                    var validationErrorResponse = new DefaultResponse<List<DatosSiniestroDetalleDto>>(
-                        success: false,
-                        message: $"Errores de validación: {errors}",
-                        errorCode: "VALIDATION_ERROR");
-                    return this.BadRequest(validationErrorResponse);
-                }
-
-                this._logger.Debug($"Consultando datos de siniestro: {request.NumeroSiniestro}");
-                var response = await this._datosSiniestroService.ObtenerDatosSiniestroAsync(request).ConfigureAwait(false);
-
-                this._logger.EndProcess(processId, stopwatch);
-
-                if (!response.Success)
+                    this.Logger.Debug($"Consultando datos de siniestro: {req.NumeroSiniestro}");
+                    return await this._datosSiniestroService.ObtenerDatosSiniestroAsync(req).ConfigureAwait(false);
+                },
+                response => new { TotalRegistros = response.Data?.Count ?? 0 },
+                response =>
                 {
-                    this._logger.Info($"No se pudieron obtener datos del siniestro: {response.Message}");
+                    this.Logger.Info($"No se pudieron obtener datos del siniestro: {response.Message}");
                     return this.BadRequest(response);
-                }
-
-                this._logger.Info($"Datos de siniestro obtenidos exitosamente. Total registros: {response.Data?.Count ?? 0}");
-                return this.Ok(response);
-            }
-            catch (InvalidOperationException ex)
-            {
-                this._logger.LogError(ex);
-                this._logger.LogError($"Error de operación al consultar siniestros: {ex.Message}");
-                this._logger.EndProcess(processId, stopwatch);
-
-                var errorResponse = new DefaultResponse<List<SiniestroDto>>(
-                    success: false,
-                    message: "Error al procesar la solicitud",
-                    data: null,
-                    errorCode: "OPERATION_ERROR");
-
-                return this.BadRequest(errorResponse);
-            }
+                },
+                response => this.Logger.Info($"Datos de siniestro obtenidos exitosamente. Total registros: {response.Data?.Count ?? 0}"))
+                .ConfigureAwait(false);
         }
     }
 }
