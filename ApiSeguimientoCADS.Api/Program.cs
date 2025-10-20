@@ -58,10 +58,7 @@ try
 
     // Servicios de la aplicación
     builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
-    builder.Services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
-    builder.Services.AddSingleton<IWeatherForecastHandler, WeatherForecastHandler>();
     builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
-    builder.Services.AddSingleton<IProductHandler, ProductHandler>();
     builder.Services.AddScoped<IServiciosExternosHandler, ServiciosExternosHandler>();
 
     // -----------------------------

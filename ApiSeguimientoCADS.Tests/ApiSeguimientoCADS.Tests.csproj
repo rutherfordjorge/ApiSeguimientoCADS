@@ -20,4 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="../ApiSeguimientoCADS.Api/ApiSeguimientoCADS.Api.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

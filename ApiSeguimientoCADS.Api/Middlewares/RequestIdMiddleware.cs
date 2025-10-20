@@ -44,6 +44,12 @@ namespace ApiSeguimientoCADS.Api.Middlewares
                 ? headerValue.ToString()
                 : Guid.NewGuid().ToString();
 
+            if (!Guid.TryParse(requestId, out _))
+            {
+                this._logger.LogError($"X-Request-ID inválido recibido: {requestId}. Generando nuevo ID.");
+                requestId = Guid.NewGuid().ToString();
+            }
+
             // Agregar al contexto de NLog usando ScopeContext
             using (ScopeContext.PushProperty(_requestIdHeader, requestId))
             {

@@ -6,9 +6,6 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
 {
     using NLog;
     using System;
-    using System.Globalization;
-    using System.Text;
-    using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
     /// <summary>
     /// Clase estática que escribe los mensajes en logger según corresponda el grado.
@@ -30,15 +27,7 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
 
             if (!string.IsNullOrWhiteSpace(mensaje))
             {
-                var mensajeFormateado = new StringBuilder();
-
-                mensajeFormateado.AppendLine();
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"**********{DateTime.Now}:{LogLevel.Information}**********");
-                mensajeFormateado.AppendLine();
-                mensajeFormateado.AppendLine(mensaje);
-
-                nlogger.Info(mensajeFormateado);
-                mensajeFormateado.Clear();
+                nlogger.Info(mensaje);
             }
         }
 
@@ -55,14 +44,7 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
 
             if (!string.IsNullOrWhiteSpace(mensaje))
             {
-                var mensajeFormateado = new StringBuilder();
-
-                mensajeFormateado.AppendLine();
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"**********{DateTime.Now}:{LogLevel.Warning}**********");
-                mensajeFormateado.AppendLine(mensaje);
-
-                nlogger.Warn(mensajeFormateado);
-                mensajeFormateado.Clear();
+                nlogger.Warn(mensaje);
             }
         }
 
@@ -79,14 +61,7 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
 
             if (!string.IsNullOrWhiteSpace(mensaje))
             {
-                var mensajeFormateado = new StringBuilder();
-
-                mensajeFormateado.AppendLine();
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"**********{DateTime.Now}:{LogLevel.Debug}**********");
-                mensajeFormateado.AppendLine(mensaje);
-
-                nlogger.Debug(mensajeFormateado);
-                mensajeFormateado.Clear();
+                nlogger.Debug(mensaje);
             }
         }
 
@@ -103,14 +78,7 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
 
             if (!string.IsNullOrWhiteSpace(mensaje))
             {
-                var mensajeFormateado = new StringBuilder();
-
-                mensajeFormateado.AppendLine();
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}**********{DateTime.Now}:{LogLevel.Error}**********");
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}{mensaje}");
-
-                nlogger.Error(mensajeFormateado);
-                mensajeFormateado.Clear();
+                nlogger.Error($"{_redAsciiColor}{mensaje}");
             }
         }
     }

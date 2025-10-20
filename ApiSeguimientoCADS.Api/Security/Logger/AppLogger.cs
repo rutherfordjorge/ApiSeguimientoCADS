@@ -93,7 +93,14 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
         /// <returns>Instancia del logger.</returns>
         public IAppLogger<T> LogError(Exception ex)
         {
+            ArgumentNullException.ThrowIfNull(ex);
+
+            // Log el mensaje de la excepción primero
+            _logErrorMessage(this._logger, $"{_redAsciiColor}Exception: {ex.Message}", ex);
+
+            // Luego el detalle completo
             this.BaseErrorLogs(ex);
+
             return this;
         }
 

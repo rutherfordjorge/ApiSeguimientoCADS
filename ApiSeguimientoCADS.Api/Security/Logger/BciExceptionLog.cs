@@ -43,7 +43,7 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
                 mensajeInner = ex.InnerException.Message;
                 if (ex.InnerException.InnerException != null)
                 {
-                    mensajeInner += ex.InnerException.InnerException.Message;
+                    mensajeInner += " | " + ex.InnerException.InnerException.Message;
                 }
             }
 
@@ -113,15 +113,22 @@ namespace ApiSeguimientoCADS.Api.Security.Logger
         {
             var mensajeFormateado = new StringBuilder();
 
-            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}-En Capa: {origenExcepcion}");
-            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}-Mensaje exception: {mensajeException}");
-            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}-Detalle: {stackTraceExcepcion?.Replace("at ", $"{_redAsciiColor}at ", StringComparison.Ordinal)}");
-            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}-El Target Site es: {targetSiteExcepcion?.ToString() ?? "N/A"}\x1b;[31m");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}═══════════════════════════════════════");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}EXCEPCIÓN CAPTURADA");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}═══════════════════════════════════════");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}Capa: {origenExcepcion}");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}Mensaje: {mensajeException}");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}HResult: {excepcionId}");
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}Target Site: {targetSiteExcepcion?.ToString() ?? "N/A"}");
 
             if (!string.IsNullOrEmpty(mensajeInnerEx))
             {
-                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}-Mensaje Inner de la excepcion:{mensajeInnerEx}");
+                mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}Inner Exception: {mensajeInnerEx}");
             }
+
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}Stack Trace:");
+            mensajeFormateado.AppendLine(stackTraceExcepcion?.Replace("at ", $"{_redAsciiColor}  → ", StringComparison.Ordinal));
+            mensajeFormateado.AppendLine(CultureInfo.InvariantCulture, $"{_redAsciiColor}═══════════════════════════════════════");
 
             return mensajeFormateado.ToString();
         }
