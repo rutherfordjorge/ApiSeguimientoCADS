@@ -11,6 +11,7 @@ namespace ApiSeguimientoCADS.Api.Services
     using Microsoft.Extensions.Options;
     using System;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -39,7 +40,7 @@ namespace ApiSeguimientoCADS.Api.Services
         }
 
         /// <inheritdoc/>
-        public async Task<bool> ValidarUsuarioAsync(string rutTitular, string sessionId)
+        public async Task<bool> ValidarUsuarioAsync(string rutTitular, string sessionId, CancellationToken cancellationToken = default)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(rutTitular);
             ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -71,7 +72,7 @@ namespace ApiSeguimientoCADS.Api.Services
 
                 this._logger.Debug($"Enviando request a CADS: {this._settings.Full}");
 
-                var response = await this._httpClientService.SendAsync<object>(apiRequest).ConfigureAwait(false);
+                var response = await this._httpClientService.SendAsync<object>(apiRequest, cancellationToken).ConfigureAwait(false);
 
                 this._logger.EndProcess(processId, stopwatch);
 
@@ -100,7 +101,7 @@ namespace ApiSeguimientoCADS.Api.Services
         }
 
         /// <inheritdoc/>
-        public async Task<object?> ObtenerInformacionUsuarioAsync(string rutTitular)
+        public async Task<object?> ObtenerInformacionUsuarioAsync(string rutTitular, CancellationToken cancellationToken = default)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(rutTitular);
 
@@ -121,7 +122,7 @@ namespace ApiSeguimientoCADS.Api.Services
 
                 this._logger.Debug($"Enviando request a CADS para obtener información de usuario");
 
-                var response = await this._httpClientService.SendAsync<object>(apiRequest).ConfigureAwait(false);
+                var response = await this._httpClientService.SendAsync<object>(apiRequest, cancellationToken).ConfigureAwait(false);
 
                 this._logger.EndProcess(processId, stopwatch);
 

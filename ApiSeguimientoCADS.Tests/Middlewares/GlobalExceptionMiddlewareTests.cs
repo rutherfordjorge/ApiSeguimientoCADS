@@ -18,7 +18,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
     public sealed class GlobalExceptionMiddlewareTests
     {
         [Fact]
-        public async Task InvokeAsync_WhenNotFoundExceptionIsThrown_ReturnsNotFoundResponse()
+        public async Task InvokeAsync_WhenNotFoundExceptionIsThrown_ReturnsNotFoundProblemDetails()
         {
             const string expectedMessage = "Resource not found";
             var middleware = CreateMiddleware(_ => throw new NotFoundException(expectedMessage));
@@ -28,12 +28,12 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
 
             Assert.Equal((int)HttpStatusCode.NotFound, context.Response.StatusCode);
             var payload = await ReadResponseAsync(context).ConfigureAwait(false);
-            Assert.True(payload.TryGetValue("message", out var messageElement));
-            Assert.Equal(expectedMessage, messageElement.GetString());
+            Assert.Equal("Recurso no encontrado", payload["title"].GetString());
+            Assert.Equal(expectedMessage, payload["detail"].GetString());
         }
 
         [Fact]
-        public async Task InvokeAsync_WhenValidationExceptionIsThrown_ReturnsBadRequestResponse()
+        public async Task InvokeAsync_WhenValidationExceptionIsThrown_ReturnsBadRequestProblemDetails()
         {
             var middleware = CreateMiddleware(_ => throw new ValidationException("Validation failed"));
             var context = CreateHttpContext();
@@ -42,12 +42,13 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
 
             Assert.Equal((int)HttpStatusCode.BadRequest, context.Response.StatusCode);
             var payload = await ReadResponseAsync(context).ConfigureAwait(false);
-            Assert.True(payload.TryGetValue("statusCode", out var statusElement));
-            Assert.Equal((int)HttpStatusCode.BadRequest, statusElement.GetInt32());
+            Assert.Equal((int)HttpStatusCode.BadRequest, payload["status"].GetInt32());
+            Assert.Equal("Solicitud inválida", payload["title"].GetString());
+            Assert.Equal("Validation failed", payload["detail"].GetString());
         }
 
         [Fact]
-        public async Task InvokeAsync_WhenUnexpectedExceptionIsThrown_ReturnsInternalServerError()
+        public async Task InvokeAsync_WhenUnexpectedExceptionIsThrown_ReturnsInternalServerErrorProblemDetails()
         {
             const string exceptionMessage = "Unexpected";
             var middleware = CreateMiddleware(_ => throw new System.Exception(exceptionMessage));
@@ -57,8 +58,9 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, context.Response.StatusCode);
             var payload = await ReadResponseAsync(context).ConfigureAwait(false);
-            Assert.True(payload.TryGetValue("message", out var messageElement));
-            Assert.Equal(exceptionMessage, messageElement.GetString());
+            Assert.Equal("Error interno del servidor", payload["title"].GetString());
+            Assert.Equal("Se produjo un error inesperado. Intente nuevamente más tarde.", payload["detail"].GetString());
+            Assert.False(payload.TryGetValue("message", out _));
         }
 
         private static GlobalExceptionMiddleware CreateMiddleware(RequestDelegate requestDelegate)

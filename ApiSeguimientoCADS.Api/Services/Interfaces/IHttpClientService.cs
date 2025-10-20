@@ -4,6 +4,7 @@
 namespace ApiSeguimientoCADS.Api.Services.Interfaces
 {
     using ApiSeguimientoCADS.Api.Services.Models;
+    using System.Threading;
 
     /// <summary>
     /// Define un contrato para el servicio responsable de realizar solicitudes HTTP genéricas
@@ -28,6 +29,6 @@ namespace ApiSeguimientoCADS.Api.Services.Interfaces
         /// Retorna un objeto <see cref="ApiResponse{T}"/> que contiene la información resultante de la operación,
         /// incluyendo el contenido deserializado, el código de estado HTTP y la respuesta en formato bruto (raw).
         /// </returns>
-        Task<ApiResponse<T>> SendAsync<T>(ApiRequest request);
+        Task<ApiResponse<T>> SendAsync<T>(ApiRequest request, CancellationToken cancellationToken = default);
     }
 }
