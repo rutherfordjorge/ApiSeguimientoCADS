@@ -163,8 +163,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data, Is.Not.Null);
-            Assert.That(result!.Data!.Count, Is.EqualTo(1));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data, Has.Count.EqualTo(1));
             this._siniestrosServiceMock.Verify(s => s.GetSiniestrosPorAsegurado(request), Times.Once);
         }
 
@@ -245,8 +245,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data, Is.Not.Null);
-            Assert.That(result!.Data!.Count, Is.EqualTo(1));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data, Has.Count.EqualTo(1));
             this._siniestrosServiceMock.Verify(s => s.GetDatosDelSiniestro(request), Times.Once);
         }
 
@@ -304,9 +304,9 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
-            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
+            Assert.That(result?.Siniestros, Is.Not.Null);
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0));
+            Assert.That(result?.TiposSiniestros, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -328,8 +328,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
-            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0));
+            Assert.That(result?.TiposSiniestros, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -359,8 +359,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
-            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0));
+            Assert.That(result?.TiposSiniestros, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -408,15 +408,16 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(1));
-            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(1));
-            Assert.That(result!.TiposSiniestros[0].Nombre, Is.EqualTo("Vehículo"));
+            Assert.That(result?.Siniestros, Is.Not.Null);
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(1));
+            Assert.That(result?.TiposSiniestros, Has.Count.EqualTo(1));
+            Assert.That(result?.TiposSiniestros?[0].Nombre, Is.EqualTo("Vehículo"));
 
-            var siniestro = result!.Siniestros[0];
-            Assert.That(siniestro.NumSiniestro, Is.EqualTo("123"));
-            Assert.That(siniestro.TipoSinistros, Is.EqualTo("auto"));
-            Assert.That(siniestro.GlosaSiniestro, Does.Contain("ABC123"));
+            var siniestro = result?.Siniestros?[0];
+            Assert.That(siniestro, Is.Not.Null);
+            Assert.That(siniestro?.NumSiniestro, Is.EqualTo("123"));
+            Assert.That(siniestro?.TipoSinistros, Is.EqualTo("auto"));
+            Assert.That(siniestro?.GlosaSiniestro, Does.Contain("ABC123"));
         }
 
         [Test]
@@ -449,8 +450,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
-            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0));
+            Assert.That(result?.TiposSiniestros, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -484,7 +485,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0)); // Failed, so no siniestros added
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0)); // Failed, so no siniestros added
         }
 
         [Test]
@@ -523,7 +524,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -571,7 +572,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Siniestros!.Count, Is.EqualTo(1)); // Only one, duplicates removed
+            Assert.That(result?.Siniestros, Has.Count.EqualTo(1)); // Only one, duplicates removed
             this._siniestrosServiceMock.Verify(
                 s => s.GetDatosDelSiniestro(It.IsAny<SiniestrosDetRequest>()),
                 Times.Once); // Called only once due to deduplication

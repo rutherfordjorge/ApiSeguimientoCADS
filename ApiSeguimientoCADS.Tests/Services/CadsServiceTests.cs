@@ -96,8 +96,8 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data, Is.Not.Null);
-            Assert.That(result!.Data!.IdUsuario, Is.EqualTo(123));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.IdUsuario, Is.EqualTo(123));
         }
 
         [Test]

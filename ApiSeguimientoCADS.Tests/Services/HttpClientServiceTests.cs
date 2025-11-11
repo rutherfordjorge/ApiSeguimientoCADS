@@ -125,9 +125,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("test"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -197,8 +197,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             // Assert
             Assert.That(result.IsSuccess, Is.True);
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.Method, Is.EqualTo(HttpMethod.Post));
-            Assert.That(capturedRequest.Content, Is.Not.Null);
+            var requestMessage = capturedRequest ?? throw new AssertionException("Expected HTTP request to be captured.");
+            Assert.That(requestMessage.Method, Is.EqualTo(HttpMethod.Post));
+            Assert.That(requestMessage.Content, Is.Not.Null);
         }
 
         [Test]
@@ -235,9 +236,11 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.Headers.Authorization, Is.Not.Null);
-            Assert.That(capturedRequest.Headers.Authorization!.Scheme, Is.EqualTo("Bearer"));
-            Assert.That(capturedRequest.Headers.Authorization.Parameter, Is.EqualTo("test-token"));
+            var requestMessage = capturedRequest ?? throw new AssertionException("Expected HTTP request to be captured.");
+            var authorization = requestMessage.Headers.Authorization;
+            Assert.That(authorization, Is.Not.Null);
+            Assert.That(authorization?.Scheme, Is.EqualTo("Bearer"));
+            Assert.That(authorization?.Parameter, Is.EqualTo("test-token"));
         }
 
         [Test]
@@ -275,8 +278,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.Headers.Contains("X-Custom-Header"), Is.True);
-            Assert.That(capturedRequest.Headers.GetValues("X-Custom-Header"), Does.Contain("custom-value"));
+            var requestMessage = capturedRequest ?? throw new AssertionException("Expected HTTP request to be captured.");
+            Assert.That(requestMessage.Headers.Contains("X-Custom-Header"), Is.True);
+            Assert.That(requestMessage.Headers.GetValues("X-Custom-Header"), Does.Contain("custom-value"));
         }
 
         [Test]
@@ -354,9 +358,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("test"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.Value, Is.EqualTo("test"));
         }
 
         [Test]

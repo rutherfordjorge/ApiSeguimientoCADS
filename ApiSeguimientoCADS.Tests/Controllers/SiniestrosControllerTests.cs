@@ -137,7 +137,7 @@ namespace ApiSeguimientoCADS.Tests.Controllers
             Assert.That(result, Is.InstanceOf<ObjectResult>());
             var objectResult = result as ObjectResult;
             Assert.That(objectResult, Is.Not.Null);
-            Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status408RequestTimeout));
+            Assert.That(objectResult?.StatusCode, Is.EqualTo(StatusCodes.Status408RequestTimeout));
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace ApiSeguimientoCADS.Tests.Controllers
             Assert.That(result, Is.InstanceOf<ObjectResult>());
             var objectResult = result as ObjectResult;
             Assert.That(objectResult, Is.Not.Null);
-            Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+            Assert.That(objectResult?.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
         }
 
         [Test]

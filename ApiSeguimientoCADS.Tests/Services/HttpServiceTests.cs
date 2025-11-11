@@ -109,7 +109,7 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("test"));
+            Assert.That(result?.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -159,8 +159,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.BearerToken, Is.EqualTo(token));
-            Assert.That(capturedRequest.Method, Is.EqualTo(HttpMethod.Get));
+            var request = capturedRequest ?? throw new AssertionException("Expected API request to be captured.");
+            Assert.That(request.BearerToken, Is.EqualTo(token));
+            Assert.That(request.Method, Is.EqualTo(HttpMethod.Get));
         }
 
         #endregion
@@ -211,7 +212,7 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("response"));
+            Assert.That(result?.Value, Is.EqualTo("response"));
         }
 
         #endregion
@@ -265,7 +266,8 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(capturedRequest!.Method, Is.EqualTo(HttpMethod.Put));
+            var request = capturedRequest ?? throw new AssertionException("Expected API request to be captured.");
+            Assert.That(request.Method, Is.EqualTo(HttpMethod.Put));
         }
 
         #endregion
@@ -304,7 +306,8 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(capturedRequest!.Method, Is.EqualTo(HttpMethod.Delete));
+            var request = capturedRequest ?? throw new AssertionException("Expected API request to be captured.");
+            Assert.That(request.Method, Is.EqualTo(HttpMethod.Delete));
         }
 
         #endregion
@@ -345,10 +348,10 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("test"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -423,8 +426,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.Headers.ContainsKey("X-Custom-Header"), Is.True);
-            Assert.That(capturedRequest.Headers["X-Custom-Header"], Is.EqualTo("custom-value"));
+            var requestWithHeaders = capturedRequest ?? throw new AssertionException("Expected API request to be captured.");
+            Assert.That(requestWithHeaders.Headers.ContainsKey("X-Custom-Header"), Is.True);
+            Assert.That(requestWithHeaders.Headers["X-Custom-Header"], Is.EqualTo("custom-value"));
         }
 
         #endregion
@@ -487,8 +491,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(capturedRequest, Is.Not.Null);
-            Assert.That(capturedRequest!.Headers.ContainsKey("X-Custom-Header"), Is.True);
-            Assert.That(capturedRequest.Method, Is.EqualTo(HttpMethod.Post));
+            var requestWithHeaders = capturedRequest ?? throw new AssertionException("Expected API request to be captured.");
+            Assert.That(requestWithHeaders.Headers.ContainsKey("X-Custom-Header"), Is.True);
+            Assert.That(requestWithHeaders.Method, Is.EqualTo(HttpMethod.Post));
         }
 
         #endregion
@@ -524,9 +529,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("test"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -605,9 +610,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("response"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data?.Value, Is.EqualTo("response"));
         }
 
         #endregion

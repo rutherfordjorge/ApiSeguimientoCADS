@@ -158,8 +158,8 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data, Is.Not.Null);
-            Assert.That(result!.Data!.Count, Is.EqualTo(1));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data, Has.Count.EqualTo(1));
             this._httpServiceMock.Verify(
                 s => s.PostWithHeadersAsync<object, SiniestrosResponse>(
                     It.IsAny<Uri>(),
@@ -330,9 +330,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data, Is.Not.Null);
-            Assert.That(result!.Data!.Count, Is.EqualTo(1));
-            Assert.That(result!.Data!.ElementAt(0).Patente, Is.EqualTo("ABC123"));
+            Assert.That(result?.Data, Is.Not.Null);
+            Assert.That(result?.Data, Has.Count.EqualTo(1));
+            Assert.That(result?.Data?.ElementAt(0).Patente, Is.EqualTo("ABC123"));
         }
 
         [Test]
@@ -431,8 +431,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(capturedHeaders, Is.Not.Null);
-            Assert.That(capturedHeaders!.ContainsKey("Authorization"), Is.True);
-            Assert.That(capturedHeaders["Authorization"], Does.StartWith("Basic "));
+            var headers = capturedHeaders ?? throw new AssertionException("Expected headers to be captured.");
+            Assert.That(headers.ContainsKey("Authorization"), Is.True);
+            Assert.That(headers["Authorization"], Does.StartWith("Basic "));
         }
 
         [Test]
@@ -463,8 +464,9 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(capturedHeaders, Is.Not.Null);
-            Assert.That(capturedHeaders!.ContainsKey("nSiniestro"), Is.True);
-            Assert.That(capturedHeaders["nSiniestro"], Is.EqualTo("12345"));
+            var headers = capturedHeaders ?? throw new AssertionException("Expected headers to be captured.");
+            Assert.That(headers.ContainsKey("nSiniestro"), Is.True);
+            Assert.That(headers["nSiniestro"], Is.EqualTo("12345"));
         }
 
         #endregion

@@ -71,7 +71,7 @@ namespace ApiSeguimientoCADS.Tests.Controllers
             Assert.That(result, Is.InstanceOf<RedirectResult>());
             var redirectResult = result as RedirectResult;
             Assert.That(redirectResult, Is.Not.Null);
-            Assert.That(redirectResult!.Url, Is.EqualTo(expectedUrl));
+            Assert.That(redirectResult?.Url, Is.EqualTo(expectedUrl));
             this._handlerMock.Verify(h => h.GenerarUrlFrontend(request), Times.Once);
         }
 
@@ -147,7 +147,7 @@ namespace ApiSeguimientoCADS.Tests.Controllers
             Assert.That(result, Is.InstanceOf<ObjectResult>());
             var objectResult = result as ObjectResult;
             Assert.That(objectResult, Is.Not.Null);
-            Assert.That(objectResult!.StatusCode, Is.EqualTo(500));
+            Assert.That(objectResult?.StatusCode, Is.EqualTo(500));
         }
 
         [Test]

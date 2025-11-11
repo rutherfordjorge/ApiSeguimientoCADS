@@ -76,7 +76,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("test"));
+            Assert.That(result?.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Once);
         }
 
@@ -135,7 +135,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("test"));
+            Assert.That(result?.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -231,7 +231,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("response"));
+            Assert.That(result?.Value, Is.EqualTo("response"));
             this._httpServiceMock.Verify(s => s.PostAsync<TestRequest, TestResponse>(url, body, null), Times.Once);
         }
 
@@ -384,10 +384,10 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Count, Is.EqualTo(3));
-            Assert.That(result![0]!.Value, Is.EqualTo("response1"));
-            Assert.That(result![1]!.Value, Is.EqualTo("response2"));
-            Assert.That(result![2]!.Value, Is.EqualTo("response3"));
+            Assert.That(result, Has.Count.EqualTo(3));
+            Assert.That(result?[0]?.Value, Is.EqualTo("response1"));
+            Assert.That(result?[1]?.Value, Is.EqualTo("response2"));
+            Assert.That(result?[2]?.Value, Is.EqualTo("response3"));
         }
 
         [Test]
@@ -413,9 +413,9 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Count, Is.EqualTo(2));
-            Assert.That(result![0], Is.Not.Null);
-            Assert.That(result![1], Is.Null);
+            Assert.That(result, Has.Count.EqualTo(2));
+            Assert.That(result?[0], Is.Not.Null);
+            Assert.That(result?[1], Is.Null);
         }
 
         #endregion
@@ -479,7 +479,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("test"));
+            Assert.That(result?.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Once);
         }
 
@@ -500,7 +500,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo("test"));
+            Assert.That(result?.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Exactly(2));
         }
 
@@ -576,8 +576,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.IsSuccess, Is.True);
-            Assert.That(result!.Data!.Value, Is.EqualTo("test"));
+            Assert.That(result?.IsSuccess, Is.True);
+            Assert.That(result?.Data?.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.SendCustomAsync<TestResponse>(request), Times.Once);
         }
 
@@ -601,10 +601,15 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .Setup(s => s.SendCustomAsync<TestResponse>(request))
                 .ReturnsAsync(originalResponse);
 
-            Func<HttpApiResponse<TestResponse>, Task<HttpApiResponse<TestResponse>>> processor = async response =>
+            Func<HttpApiResponse<TestResponse>, Task<HttpApiResponse<TestResponse>>> processor = response =>
             {
-                response.Data!.Value = "processed";
-                return await Task.FromResult(response);
+                if (response.Data is null)
+                {
+                    throw new InvalidOperationException("Expected response data.");
+                }
+
+                response.Data.Value = "processed";
+                return Task.FromResult(response);
             };
 
             // Act
@@ -612,7 +617,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data!.Value, Is.EqualTo("processed"));
+            Assert.That(result?.Data?.Value, Is.EqualTo("processed"));
         }
 
         [Test]
