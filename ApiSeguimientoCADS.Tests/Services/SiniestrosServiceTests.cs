@@ -124,7 +124,7 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosRequest { RutAsegurado = null! };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.GetSiniestrosPorAsegurado(request));
         }
 
@@ -158,8 +158,10 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data.Count, Is.EqualTo(1));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Data, Is.Not.Null);
+            var nonNullData = nonNullResult.Data!;
+            Assert.That(nonNullData.Count, Is.EqualTo(1));
             this._httpServiceMock.Verify(
                 s => s.PostWithHeadersAsync<object, SiniestrosResponse>(
                     It.IsAny<Uri>(),
@@ -181,10 +183,10 @@ namespace ApiSeguimientoCADS.Tests.Services
                     It.IsAny<object>(),
                     null,
                     It.IsAny<Dictionary<string, string>>()))
-                .ReturnsAsync((SiniestrosResponse?)null);
+                .ReturnsAsync((SiniestrosResponse)null!);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await this._service.GetSiniestrosPorAsegurado(request));
         }
 
@@ -213,7 +215,7 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await service.GetSiniestrosPorAsegurado(request));
         }
 

@@ -44,7 +44,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
             });
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await middleware.InvokeAsync(null!));
         }
 
@@ -252,7 +252,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
             });
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await middleware.InvokeAsync(context));
 
             // Verify correlation ID was still set before the exception
