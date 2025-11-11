@@ -1,0 +1,714 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Compilador de Microsoft (R) Visual C#",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25413.5 (b828a8df)",
+        "semanticVersion": "4.14.0",
+        "language": "es-ES"
+      },
+      "results": [
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 79,
+                  "startColumn": 25,
+                  "endLine": 79,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Controllers/FakeControllerTests.cs",
+                "region": {
+                  "startLine": 187,
+                  "startColumn": 17,
+                  "endLine": 187,
+                  "endColumn": 44
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Controllers/FakeControllerTests.cs",
+                "region": {
+                  "startLine": 198,
+                  "startColumn": 17,
+                  "endLine": 198,
+                  "endColumn": 44
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Controllers/FakeControllerTests.cs",
+                "region": {
+                  "startLine": 209,
+                  "startColumn": 17,
+                  "endLine": 209,
+                  "endColumn": 44
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8620",
+          "level": "warning",
+          "message": "El argumento de tipo \"ISetup<ISiniestrosService, Task<SiniestrosResponse>>\" no se puede usar para el parámetro \"mock\" de tipo \"IReturns<ISiniestrosService, Task<SiniestrosResponse?>>\" en \"IReturnsResult<ISiniestrosService> ReturnsExtensions.ReturnsAsync<ISiniestrosService, SiniestrosResponse?>(IReturns<ISiniestrosService, Task<SiniestrosResponse?>> mock, SiniestrosResponse? value)\" debido a las diferencias en la nulabilidad de los tipos de referencia.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/SiniestrosHandlerTests.cs",
+                "region": {
+                  "startLine": 130,
+                  "startColumn": 13,
+                  "endLine": 131,
+                  "endColumn": 88
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/SiniestrosHandlerTests.cs",
+                "region": {
+                  "startLine": 167,
+                  "startColumn": 25,
+                  "endLine": 167,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 138,
+                  "startColumn": 25,
+                  "endLine": 138,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Middlewares/CorrelationIdMiddlewareTests.cs",
+                "region": {
+                  "startLine": 245,
+                  "startColumn": 27,
+                  "endLine": 245,
+                  "endColumn": 95
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 72,
+                  "startColumn": 27,
+                  "endLine": 72,
+                  "endColumn": 86
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 93,
+                  "startColumn": 27,
+                  "endLine": 93,
+                  "endColumn": 87
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/SiniestrosHandlerTests.cs",
+                "region": {
+                  "startLine": 249,
+                  "startColumn": 25,
+                  "endLine": 249,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 234,
+                  "startColumn": 25,
+                  "endLine": 234,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 239,
+                  "startColumn": 27,
+                  "endLine": 239,
+                  "endColumn": 101
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 158,
+                  "startColumn": 27,
+                  "endLine": 158,
+                  "endColumn": 83
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/SiniestrosServiceTests.cs",
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 25,
+                  "endLine": 162,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS1998",
+          "level": "warning",
+          "message": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica. Puede usar el operador 'await' para esperar llamadas API que no sean de bloqueo o 'await Task.Run(...)' para hacer tareas enlazadas a la CPU en un subproceso en segundo plano.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 238,
+                  "startColumn": 27,
+                  "endLine": 238,
+                  "endColumn": 70
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 482,
+                  "startColumn": 25,
+                  "endLine": 482,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CS8602",
+          "level": "warning",
+          "message": "Desreferencia de una referencia posiblemente NULL.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Handlers/HttpHandlerTests.cs",
+                "region": {
+                  "startLine": 503,
+                  "startColumn": 25,
+                  "endLine": 503,
+                  "endColumn": 31
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 188,
+                  "startColumn": 23,
+                  "endLine": 188,
+                  "endColumn": 33
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 204,
+                  "startColumn": 27,
+                  "endLine": 204,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 248,
+                  "startColumn": 27,
+                  "endLine": 248,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2012",
+          "level": "note",
+          "message": "Las instancias de ValueTask devueltas por llamadas de método deben esperarse directamente, devolverse o pasarse como argumento a otra llamada de método. Otro uso, como el almacenamiento de una instancia en una variable local o un campo, puede ser indicativo de un error, ya que las instancias de ValueTask solo deben consumirse una vez.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 246,
+                  "startColumn": 28,
+                  "endLine": 249,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 270,
+                  "startColumn": 27,
+                  "endLine": 270,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 283,
+                  "startColumn": 27,
+                  "endLine": 283,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 295,
+                  "startColumn": 27,
+                  "endLine": 295,
+                  "endColumn": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        },
+        {
+          "ruleId": "CA2012",
+          "level": "note",
+          "message": "Las instancias de ValueTask devueltas por llamadas de método deben esperarse directamente, devolverse o pasarse como argumento a otra llamada de método. Otro uso, como el almacenamiento de una instancia en una variable local o un campo, puede ser indicativo de un error, ya que las instancias de ValueTask solo deben consumirse una vez.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 268,
+                  "startColumn": 38,
+                  "endLine": 271,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA2012",
+          "level": "note",
+          "message": "Las instancias de ValueTask devueltas por llamadas de método deben esperarse directamente, devolverse o pasarse como argumento a otra llamada de método. Otro uso, como el almacenamiento de una instancia en una variable local o un campo, puede ser indicativo de un error, ya que las instancias de ValueTask solo deben consumirse una vez.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 281,
+                  "startColumn": 33,
+                  "endLine": 284,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA2016",
+          "level": "note",
+          "message": "Reenviar el parámetro \"_\" al método \"Delay\" o pasar \"CancellationToken.None\" de forma explícita para indicar que no se propagó el token intencionalmente",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Tests/Services/ResiliencePolicyServiceTests.cs",
+                "region": {
+                  "startLine": 309,
+                  "startColumn": 23,
+                  "endLine": 309,
+                  "endColumn": 33
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "ArgumentName": "_",
+              "ParameterName": null,
+              "ShouldFix": "1"
+            }
+          }
+        }
+      ],
+      "rules": {
+        "CA2012": {
+          "id": "CA2012",
+          "shortDescription": "Usar ValueTask correctamente",
+          "fullDescription": "Los elementos ValueTask devueltos por invocaciones de miembros están diseñados para esperarlos directamente. Los intentos de consumir un ValueTask varias veces o de acceder directamente al resultado de uno antes de que se sepa que se ha completado pueden producir una excepción o daños en los datos. La omisión de un ValueTask en este caso indica probablemente un error funcional y puede degradar el rendimiento.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2012",
+          "properties": {
+            "category": "Reliability",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA2016": {
+          "id": "CA2016",
+          "shortDescription": "Reenviar el parámetro \"CancellationToken\" a los métodos",
+          "fullDescription": "Reenvíe el parámetro \"CancellationToken\" a los métodos para garantizar que las notificaciones de cancelación de operaciones se propagan correctamente, o bien pase \"CancellationToken.None\" explícitamente para indicar que no se propagará el token intencionalmente.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2016",
+          "properties": {
+            "category": "Reliability",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CS1998": {
+          "id": "CS1998",
+          "shortDescription": "El método asincrónico carece de operadores \"await\" y se ejecutará de forma sincrónica",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS1998)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "CS8602": {
+          "id": "CS8602",
+          "shortDescription": "Desreferencia de una referencia posiblemente NULL.",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8602)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "CS8620": {
+          "id": "CS8620",
+          "shortDescription": "El argumento no se puede usar para el parámetro debido a las diferencias en la nulabilidad de los tipos de referencia.",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8620)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

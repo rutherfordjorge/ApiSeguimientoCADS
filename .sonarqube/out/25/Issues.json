@@ -1,0 +1,513 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Compilador de Microsoft (R) Visual C#",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25413.5 (b828a8df)",
+        "semanticVersion": "4.14.0",
+        "language": "es-ES"
+      },
+      "results": [
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Handlers/HttpHandler.cs",
+                "region": {
+                  "startLine": 177,
+                  "startColumn": 24,
+                  "endLine": 177,
+                  "endColumn": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"Auth\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.Production.json",
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 14,
+                  "endLine": 32,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"TokenCABValue\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.Production.json",
+                "region": {
+                  "startLine": 34,
+                  "startColumn": 23,
+                  "endLine": 34,
+                  "endColumn": 238
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"Auth\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.Production.json",
+                "region": {
+                  "startLine": 41,
+                  "startColumn": 14,
+                  "endLine": 41,
+                  "endColumn": 50
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"Auth\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.QA.json",
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 14,
+                  "endLine": 32,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"TokenCABValue\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.QA.json",
+                "region": {
+                  "startLine": 34,
+                  "startColumn": 23,
+                  "endLine": 34,
+                  "endColumn": 238
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6418",
+          "level": "warning",
+          "message": "\"Auth\" detected here, make sure this is not a hard-coded secret.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/appsettings.QA.json",
+                "region": {
+                  "startLine": 41,
+                  "startColumn": 14,
+                  "endLine": 41,
+                  "endColumn": 50
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1056",
+          "level": "warning",
+          "message": "Cambie el tipo de la propiedad \"EPSiniestroPorAseguradoSettings.ValidarAccesoMultipleUrl\" de \"string\" a \"System.Uri\"",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Models/Settings/ExternalApis/EPSiniestroPorAseguradoSettings.cs",
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 23,
+                  "endLine": 45,
+                  "endColumn": 47
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Infrastructure/Swagger/CorrelationIdHeaderOperationFilter.cs",
+                "region": {
+                  "startLine": 23,
+                  "startColumn": 38,
+                  "endLine": 23,
+                  "endColumn": 39
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Models/DTOs/Siniestros/SiniestrosDataDto.cs",
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 67,
+                  "endLine": 15,
+                  "endColumn": 68
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Models/DTOs/Siniestros/SiniestrosDataDto.cs",
+                "region": {
+                  "startLine": 20,
+                  "startColumn": 58,
+                  "endLine": 20,
+                  "endColumn": 59
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Models/Requests/Http/HttpRequest.cs",
+                "region": {
+                  "startLine": 36,
+                  "startColumn": 68,
+                  "endLine": 36,
+                  "endColumn": 69
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Models/Responses/Http/HttpApiResponse.cs",
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 70,
+                  "endLine": 38,
+                  "endColumn": 71
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "S6672",
+          "level": "warning",
+          "message": "Update this logger to use its enclosing type.",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Security/Logger/AppLogger.cs",
+                "region": {
+                  "startLine": 71,
+                  "startColumn": 34,
+                  "endLine": 71,
+                  "endColumn": 35
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "SA1010",
+          "level": "warning",
+          "message": "Opening square brackets should not be preceded by a space",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Services/Models/ApiRequest.cs",
+                "region": {
+                  "startLine": 60,
+                  "startColumn": 62,
+                  "endLine": 60,
+                  "endColumn": 63
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "action": "remove",
+              "layout": "pack",
+              "location": "preceding"
+            }
+          }
+        },
+        {
+          "ruleId": "S5122",
+          "level": "warning",
+          "message": "Make sure this permissive CORS policy is safe here.",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Program.cs",
+                "region": {
+                  "startLine": 31,
+                  "startColumn": 13,
+                  "endLine": 31,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "CA1859",
+          "level": "warning",
+          "message": "Cambiar el tipo de valor devuelto del método 'Log' de 'ApiSeguimientoCADS.Api.Security.Logger.IAppLogger<T>' a 'ApiSeguimientoCADS.Api.Security.Logger.AppLogger<T>' para mejorar el rendimiento",
+          "suppressionStates": [
+            "suppressedInSource"
+          ],
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///c:/Analisis/SistemasAnalizar/apiseguimientocads/ApiSeguimientoCADS.Api/Security/Logger/AppLogger.cs",
+                "region": {
+                  "startLine": 207,
+                  "startColumn": 31,
+                  "endLine": 207,
+                  "endColumn": 34
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "CA1056": {
+          "id": "CA1056",
+          "shortDescription": "Las propiedades de tipo URI no deben ser cadenas",
+          "fullDescription": "Esta regla supone que la propiedad representa un identificador uniforme de recursos (URI). La representación de cadena de un URI tiende a analizar y codificar los errores, lo que puede crear puntos vulnerables en la seguridad. La clase System.Uri proporciona estos servicios de manera segura.",
+          "defaultLevel": "warning",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1056",
+          "properties": {
+            "category": "Design",
+            "isEnabledByDefault": false,
+            "tags": [
+              "PortedFromFxCop",
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CA1859": {
+          "id": "CA1859",
+          "shortDescription": "Usar tipos concretos cuando sea posible para mejorar el rendimiento",
+          "fullDescription": "El uso de tipos concretos evita la sobrecarga de llamadas virtuales o de interfaz y habilita la inserción.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1859",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "S5122": {
+          "id": "S5122",
+          "shortDescription": "Having a permissive Cross-Origin Resource Sharing policy is security-sensitive",
+          "fullDescription": "Having a permissive Cross-Origin Resource Sharing policy is security-sensitive. It has led in the past to the following vulnerabilities:",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-5122",
+          "properties": {
+            "category": "Minor Security Hotspot",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6418": {
+          "id": "S6418",
+          "shortDescription": "Hard-coded secrets are security-sensitive",
+          "fullDescription": "Because it is easy to extract strings from an application source code or binary, secrets should not be hard-coded. This is particularly true for applications that are distributed or that are open-source.",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-6418",
+          "properties": {
+            "category": "Blocker Security Hotspot",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6672": {
+          "id": "S6672",
+          "shortDescription": "Generic logger injection should match enclosing type",
+          "fullDescription": "In most logging frameworks, it’s good practice to set the logger name to match its enclosing type, as enforced by {rule:csharpsquid:S3416}.",
+          "defaultLevel": "warning",
+          "helpUri": "https://rules.sonarsource.com/csharp/RSPEC-6672",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "SA1010": {
+          "id": "SA1010",
+          "shortDescription": "Opening square brackets should be spaced correctly",
+          "fullDescription": "An opening square bracket within a C# statement is not spaced correctly.",
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1010.md",
+          "properties": {
+            "category": "StyleCop.CSharp.SpacingRules",
+            "isEnabledByDefault": true
+          }
+        }
+      }
+    }
+  ]
+}

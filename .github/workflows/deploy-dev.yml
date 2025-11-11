@@ -1,0 +1,20 @@
+name: Deploy Net6 DEV
+on:
+  push:
+    branches: ["dev"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  Deploy:
+    permissions:
+      contents: read
+      security-events: write
+    uses: bci-seguros/devops/.github/workflows/wkfl_dev_net6.yml@main    
+    with:
+      config_parametros: >
+           
+    secrets:
+      SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      KEY_SERVER_IIS: ${{ secrets.KEY_SERVER_IIS }}
+      CONFIG_CONNECTIONSTRINGS: >

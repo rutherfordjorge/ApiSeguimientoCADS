@@ -1,0 +1,1 @@
+c:\Analisis\SistemasAnalizar\apiseguimientocads\.sonarqube\out\22

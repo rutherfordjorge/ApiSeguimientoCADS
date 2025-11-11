@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>ApiSeguimientoCADS.Api</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Product</ProjectType>
+  <ProjectGuid>54b2f4c3-ffc7-4137-ab64-5e2eb66e9783</ProjectGuid>
+  <FullPath>C:\Analisis\SistemasAnalizar\apiseguimientocads\ApiSeguimientoCADS.Api\ApiSeguimientoCADS.Api.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResultFiles>
+    <AnalysisResultFile Id="FilesToAnalyze" Location="c:\Analisis\SistemasAnalizar\apiseguimientocads\.sonarqube\conf\3\FilesToAnalyze.txt" />
+  </AnalysisResultFiles>
+  <AnalysisSettings>
+    <Property Name="sonar.cs.roslyn.reportFilePaths">c:\Analisis\SistemasAnalizar\apiseguimientocads\.sonarqube\out\3\Issues.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPaths">c:\Analisis\SistemasAnalizar\apiseguimientocads\.sonarqube\out\3</Property>
+    <Property Name="sonar.cs.scanner.telemetry">c:\Analisis\SistemasAnalizar\apiseguimientocads\.sonarqube\out\3\Telemetry.json</Property>
+  </AnalysisSettings>
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+  <TargetFramework>net8.0</TargetFramework>
+</ProjectInfo>

@@ -1,0 +1,1 @@
+”R~c:\Analisis\SistemasAnalizar\apiseguimientocads\ApiSeguimientoCADS.IntegrationTests\ApiSeguimientoCADS.IntegrationTests.csproj¢net8.0òCSharp12

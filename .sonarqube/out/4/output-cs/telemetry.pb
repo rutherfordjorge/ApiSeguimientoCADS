@@ -1,0 +1,1 @@
+~RhC:\Analisis\SistemasAnalizar\apiseguimientocads\ApiSeguimientoCADS.Tests\ApiSeguimientoCADS.Tests.csproj¢net8.0òCSharp12

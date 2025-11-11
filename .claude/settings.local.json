@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet restore:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet test:*)",
+      "Bash(\"C:\\Desarrollos\\GitHubBci\\apiseguimientocads\\ApiSeguimientoCADS.Api\\Middlewares\\CorrelationIdMiddleware.cs\")",
+      "Bash(printf:*)",
+      "Bash(taskkill:*)",
+      "Bash(dir /s /b .sonarqube*.json 2)",
+      "Bash(nul)",
+      "Bash(dir /s /b .sonarqube*.txt 2)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
