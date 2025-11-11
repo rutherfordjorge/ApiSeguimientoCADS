@@ -194,7 +194,7 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void TimeoutPipeline_WhenOperationExceedsTimeout_ThrowsTimeoutException()
+        public async Task TimeoutPipeline_WhenOperationExceedsTimeout_ThrowsTimeoutException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<TimeoutRejectedException>(async () =>

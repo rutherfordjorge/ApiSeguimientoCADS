@@ -53,7 +53,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetWithValidationAsync Tests
 
         [Test]
-        public void GetWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -162,7 +162,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithValidationAsync_WhenServiceThrowsInvalidOperationException_Rethrows()
+        public async Task GetWithValidationAsync_WhenServiceThrowsInvalidOperationException_Rethrows()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -177,7 +177,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithValidationAsync_WhenServiceThrowsHttpRequestException_Rethrows()
+        public async Task GetWithValidationAsync_WhenServiceThrowsHttpRequestException_Rethrows()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -196,7 +196,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region PostWithValidationAsync Tests
 
         [Test]
-        public void PostWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PostWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
@@ -207,7 +207,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void PostWithValidationAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PostWithValidationAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -333,7 +333,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetMultipleAsync Tests
 
         [Test]
-        public void GetMultipleAsync_WhenUrlsIsNull_ThrowsArgumentNullException()
+        public async Task GetMultipleAsync_WhenUrlsIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -432,7 +432,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetWithRetryAsync Tests
 
         [Test]
-        public void GetWithRetryAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithRetryAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -440,7 +440,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenMaxRetriesIsZero_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenMaxRetriesIsZero_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -451,7 +451,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenMaxRetriesIsNegative_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenMaxRetriesIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -462,7 +462,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenDelayIsNegative_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenDelayIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -516,7 +516,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenAllAttemptsFailWithHttpRequestException_ThrowsException()
+        public async Task GetWithRetryAsync_WhenAllAttemptsFailWithHttpRequestException_ThrowsException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -533,7 +533,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenInvalidOperationException_ThrowsImmediately()
+        public async Task GetWithRetryAsync_WhenInvalidOperationException_ThrowsImmediately()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -554,7 +554,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region ExecuteCustomRequestAsync Tests
 
         [Test]
-        public void ExecuteCustomRequestAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task ExecuteCustomRequestAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -629,7 +629,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void ExecuteCustomRequestAsync_WhenServiceThrowsException_Rethrows()
+        public async Task ExecuteCustomRequestAsync_WhenServiceThrowsException_Rethrows()
         {
             // Arrange
             var request = new HttpRequest

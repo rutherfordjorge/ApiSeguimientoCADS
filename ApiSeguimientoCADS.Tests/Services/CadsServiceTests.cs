@@ -51,10 +51,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void ValideUserAccess_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task ValideUserAccess_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await this._cadsService.ValideUserAccess(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await this._cadsService.ValideUserAccess(null!));
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void ValideUserAccess_WhenResponseIsNotSuccessful_ThrowsInvalidOperationException()
+        public async Task ValideUserAccess_WhenResponseIsNotSuccessful_ThrowsInvalidOperationException()
         {
             // Arrange
             var request = new ValidateAccessRequest
@@ -178,7 +178,7 @@ namespace ApiSeguimientoCADS.Tests.Services
                 .ReturnsAsync(httpResponse);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this._cadsService.ValideUserAccess(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this._cadsService.ValideUserAccess(request));
         }
 
         [Test]

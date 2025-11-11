@@ -35,7 +35,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
         }
 
         [Test]
-        public void InvokeAsync_WhenContextIsNull_ThrowsArgumentNullException()
+        public async Task InvokeAsync_WhenContextIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var middleware = new CorrelationIdMiddleware(context =>

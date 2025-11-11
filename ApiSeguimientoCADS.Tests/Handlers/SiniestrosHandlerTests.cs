@@ -81,7 +81,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -89,7 +89,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = null! };
@@ -100,7 +100,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsEmpty_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsEmpty_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = string.Empty };
@@ -111,7 +111,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsWhiteSpace_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsWhiteSpace_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = "   " };
@@ -122,7 +122,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
+        public async Task GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
@@ -171,7 +171,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetDetalleSiniestros_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -179,7 +179,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINsinieIsZero_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINsinieIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 0, INdocto = 100 };
@@ -190,7 +190,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINsinieIsNegative_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINsinieIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = -1, INdocto = 100 };
@@ -201,7 +201,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINdoctoIsZero_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINdoctoIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = 0 };
@@ -212,7 +212,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINdoctoIsNegative_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINdoctoIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = -1 };
@@ -255,7 +255,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsNull_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsNull_ThrowsArgumentException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(async () =>
@@ -263,7 +263,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsEmpty_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsEmpty_ThrowsArgumentException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(async () =>
@@ -271,7 +271,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsWhiteSpace_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsWhiteSpace_ThrowsArgumentException()
         {
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(async () =>
@@ -279,7 +279,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsInvalid_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsInvalid_ThrowsArgumentException()
         {
             // Arrange
             var invalidRut = "12345678-0"; // Invalid checksum
