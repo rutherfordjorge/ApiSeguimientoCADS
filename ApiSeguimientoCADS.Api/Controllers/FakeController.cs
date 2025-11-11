@@ -573,7 +573,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
         {
             var numeroSiniestro = GetPropertySafe(siniestroData, "NumeroSiniestro");
 
-            if (!int.TryParse(numeroSiniestro, CultureInfo.InvariantCulture, out int numSiniestro))
+            if (!int.TryParse(numeroSiniestro, NumberStyles.Integer, CultureInfo.InvariantCulture, out int numSiniestro))
             {
                 this._logger.Debug($"No se pudo parsear NumeroSiniestro: {numeroSiniestro}. Se omitirá este registro.");
                 return null;
@@ -610,7 +610,7 @@ namespace ApiSeguimientoCADS.Api.Controllers
             {
                 var numeroPolizaStr = new string(s.NumeroPoliza!.Where(char.IsDigit).ToArray());
 
-                if (!int.TryParse(numeroPolizaStr, CultureInfo.InvariantCulture, out int numeroDocto))
+                if (!int.TryParse(numeroPolizaStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out int numeroDocto))
                 {
                     this._logger.Debug($"No se pudo parsear NumeroPoliza: {s.NumeroPoliza}. Se omitirá este registro.");
                     continue;

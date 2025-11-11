@@ -179,7 +179,7 @@ namespace ApiSeguimientoCADS.Api.Handlers
                 var numeroPolizaStr = new string(s.NumeroPoliza!.Where(char.IsDigit).ToArray());
 
                 // Validar que se pueda parsear a entero
-                if (!int.TryParse(numeroPolizaStr, CultureInfo.InvariantCulture, out int numeroDocto))
+                if (!int.TryParse(numeroPolizaStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out int numeroDocto))
                 {
                     this._logger.Debug($"No se pudo parsear NumeroPoliza: {s.NumeroPoliza}. Se omitirá este registro.");
                     continue;
