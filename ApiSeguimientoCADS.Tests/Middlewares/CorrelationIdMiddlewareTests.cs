@@ -35,7 +35,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
         }
 
         [Test]
-        public void InvokeAsync_WhenContextIsNull_ThrowsArgumentNullException()
+        public async Task InvokeAsync_WhenContextIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var middleware = new CorrelationIdMiddleware(context =>
@@ -44,7 +44,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
             });
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await middleware.InvokeAsync(null!));
         }
 
@@ -252,7 +252,7 @@ namespace ApiSeguimientoCADS.Tests.Middlewares
             });
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await middleware.InvokeAsync(context));
 
             // Verify correlation ID was still set before the exception

@@ -53,10 +53,10 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetWithValidationAsync Tests
 
         [Test]
-        public void GetWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.GetWithValidationAsync<TestResponse>(null!));
         }
 
@@ -76,7 +76,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Value, Is.EqualTo("test"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Once);
         }
 
@@ -114,6 +115,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            var nonNullResult = result!;
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, token), Times.Once);
         }
 
@@ -135,7 +137,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Value, Is.EqualTo("test"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Value, Is.EqualTo("test"));
         }
 
         [Test]
@@ -159,7 +162,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetWithValidationAsync_WhenServiceThrowsInvalidOperationException_Rethrows()
+        public async Task GetWithValidationAsync_WhenServiceThrowsInvalidOperationException_Rethrows()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -169,12 +172,12 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ThrowsAsync(new InvalidOperationException("Test error"));
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await this._handler.GetWithValidationAsync<TestResponse>(url));
         }
 
         [Test]
-        public void GetWithValidationAsync_WhenServiceThrowsHttpRequestException_Rethrows()
+        public async Task GetWithValidationAsync_WhenServiceThrowsHttpRequestException_Rethrows()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -184,7 +187,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ThrowsAsync(new HttpRequestException("Network error"));
 
             // Act & Assert
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
                 await this._handler.GetWithValidationAsync<TestResponse>(url));
         }
 
@@ -193,24 +196,24 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region PostWithValidationAsync Tests
 
         [Test]
-        public void PostWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PostWithValidationAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.PostWithValidationAsync<TestRequest, TestResponse>(null!, body));
         }
 
         [Test]
-        public void PostWithValidationAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PostWithValidationAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.PostWithValidationAsync<TestRequest, TestResponse>(url, null!));
         }
 
@@ -231,7 +234,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Value, Is.EqualTo("response"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Value, Is.EqualTo("response"));
             this._httpServiceMock.Verify(s => s.PostAsync<TestRequest, TestResponse>(url, body, null), Times.Once);
         }
 
@@ -245,7 +249,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
             Func<TestRequest, bool> requestValidator = r => false; // Always fails
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await this._handler.PostWithValidationAsync<TestRequest, TestResponse>(
                     url,
                     body,
@@ -274,6 +278,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            var nonNullResult = result!;
             this._httpServiceMock.Verify(s => s.PostAsync<TestRequest, TestResponse>(url, body, null), Times.Once);
         }
 
@@ -319,6 +324,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            var nonNullResult = result!;
             this._httpServiceMock.Verify(s => s.PostAsync<TestRequest, TestResponse>(url, body, token), Times.Once);
         }
 
@@ -327,10 +333,10 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetMultipleAsync Tests
 
         [Test]
-        public void GetMultipleAsync_WhenUrlsIsNull_ThrowsArgumentNullException()
+        public async Task GetMultipleAsync_WhenUrlsIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.GetMultipleAsync<TestResponse>(null!));
         }
 
@@ -345,7 +351,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.Empty);
+            var nonNullResult = result!;
+            Assert.That(nonNullResult, Is.Empty);
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(It.IsAny<Uri>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -384,10 +391,11 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count, Is.EqualTo(3));
-            Assert.That(result[0]!.Value, Is.EqualTo("response1"));
-            Assert.That(result[1]!.Value, Is.EqualTo("response2"));
-            Assert.That(result[2]!.Value, Is.EqualTo("response3"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Count, Is.EqualTo(3));
+            Assert.That(nonNullResult[0]!.Value, Is.EqualTo("response1"));
+            Assert.That(nonNullResult[1]!.Value, Is.EqualTo("response2"));
+            Assert.That(nonNullResult[2]!.Value, Is.EqualTo("response3"));
         }
 
         [Test]
@@ -413,9 +421,10 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result[0], Is.Not.Null);
-            Assert.That(result[1], Is.Null);
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Count, Is.EqualTo(2));
+            Assert.That(nonNullResult[0], Is.Not.Null);
+            Assert.That(nonNullResult[1], Is.Null);
         }
 
         #endregion
@@ -423,43 +432,43 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region GetWithRetryAsync Tests
 
         [Test]
-        public void GetWithRetryAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithRetryAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(null!));
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenMaxRetriesIsZero_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenMaxRetriesIsZero_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(url, maxRetries: 0));
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenMaxRetriesIsNegative_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenMaxRetriesIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(url, maxRetries: -1));
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenDelayIsNegative_ThrowsArgumentException()
+        public async Task GetWithRetryAsync_WhenDelayIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(url, delayMs: -1));
         }
 
@@ -479,7 +488,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Value, Is.EqualTo("test"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Once);
         }
 
@@ -500,12 +510,13 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Value, Is.EqualTo("test"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Exactly(2));
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenAllAttemptsFailWithHttpRequestException_ThrowsException()
+        public async Task GetWithRetryAsync_WhenAllAttemptsFailWithHttpRequestException_ThrowsException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -515,14 +526,14 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ThrowsAsync(new HttpRequestException("Network error"));
 
             // Act & Assert
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(url, maxRetries: 3, delayMs: 10));
 
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Exactly(3));
         }
 
         [Test]
-        public void GetWithRetryAsync_WhenInvalidOperationException_ThrowsImmediately()
+        public async Task GetWithRetryAsync_WhenInvalidOperationException_ThrowsImmediately()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -532,7 +543,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ThrowsAsync(new InvalidOperationException("Invalid operation"));
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await this._handler.GetWithRetryAsync<TestResponse>(url, maxRetries: 3));
 
             this._httpServiceMock.Verify(s => s.GetAsync<TestResponse>(url, null), Times.Once); // No retry on InvalidOperationException
@@ -543,10 +554,10 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         #region ExecuteCustomRequestAsync Tests
 
         [Test]
-        public void ExecuteCustomRequestAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task ExecuteCustomRequestAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._handler.ExecuteCustomRequestAsync<TestResponse>(null!));
         }
 
@@ -576,8 +587,9 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Value, Is.EqualTo("test"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.IsSuccess, Is.True);
+            Assert.That(nonNullResult.Data!.Value, Is.EqualTo("test"));
             this._httpServiceMock.Verify(s => s.SendCustomAsync<TestResponse>(request), Times.Once);
         }
 
@@ -612,11 +624,12 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data!.Value, Is.EqualTo("processed"));
+            var nonNullResult = result!;
+            Assert.That(nonNullResult.Data!.Value, Is.EqualTo("processed"));
         }
 
         [Test]
-        public void ExecuteCustomRequestAsync_WhenServiceThrowsException_Rethrows()
+        public async Task ExecuteCustomRequestAsync_WhenServiceThrowsException_Rethrows()
         {
             // Arrange
             var request = new HttpRequest
@@ -630,7 +643,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ThrowsAsync(new HttpRequestException("Network error"));
 
             // Act & Assert
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
                 await this._handler.ExecuteCustomRequestAsync<TestResponse>(request));
         }
 

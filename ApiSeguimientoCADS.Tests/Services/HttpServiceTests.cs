@@ -81,10 +81,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region GetAsync Tests
 
         [Test]
-        public void GetAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.GetAsync<TestResponse>(null!));
         }
 
@@ -168,24 +168,24 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region PostAsync Tests
 
         [Test]
-        public void PostAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PostAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostAsync<TestRequest, TestResponse>(null!, body));
         }
 
         [Test]
-        public void PostAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PostAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostAsync<TestRequest, TestResponse>(url, null!));
         }
 
@@ -219,24 +219,24 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region PutAsync Tests
 
         [Test]
-        public void PutAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PutAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PutAsync<TestRequest, TestResponse>(null!, body));
         }
 
         [Test]
-        public void PutAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PutAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PutAsync<TestRequest, TestResponse>(url, null!));
         }
 
@@ -273,10 +273,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region DeleteAsync Tests
 
         [Test]
-        public void DeleteAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task DeleteAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.DeleteAsync<TestResponse>(null!));
         }
 
@@ -312,10 +312,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region SendCustomAsync Tests
 
         [Test]
-        public void SendCustomAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task SendCustomAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.SendCustomAsync<TestResponse>(null!));
         }
 
@@ -385,10 +385,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region GetWithHeadersAsync Tests
 
         [Test]
-        public void GetWithHeadersAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithHeadersAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.GetWithHeadersAsync<TestResponse>(null!));
         }
 
@@ -432,24 +432,24 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region PostWithHeadersAsync Tests
 
         [Test]
-        public void PostWithHeadersAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PostWithHeadersAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostWithHeadersAsync<TestRequest, TestResponse>(null!, body));
         }
 
         [Test]
-        public void PostWithHeadersAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PostWithHeadersAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostWithHeadersAsync<TestRequest, TestResponse>(url, null!));
         }
 
@@ -496,10 +496,10 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region GetWithCircuitBreakerAsync Tests
 
         [Test]
-        public void GetWithCircuitBreakerAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task GetWithCircuitBreakerAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.GetWithCircuitBreakerAsync<TestResponse>(null!));
         }
 
@@ -562,24 +562,24 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region PostWithCircuitBreakerAsync Tests
 
         [Test]
-        public void PostWithCircuitBreakerAsync_WhenUrlIsNull_ThrowsArgumentNullException()
+        public async Task PostWithCircuitBreakerAsync_WhenUrlIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var body = new TestRequest { Data = "test" };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostWithCircuitBreakerAsync<TestRequest, TestResponse>(null!, body));
         }
 
         [Test]
-        public void PostWithCircuitBreakerAsync_WhenBodyIsNull_ThrowsArgumentNullException()
+        public async Task PostWithCircuitBreakerAsync_WhenBodyIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this._service.PostWithCircuitBreakerAsync<TestRequest, TestResponse>(url, null!));
         }
 

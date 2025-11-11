@@ -75,9 +75,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             var executionCount = 0;
 
             // Act & Assert
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
             {
-                await this._service.RetryPipeline.ExecuteAsync(async _ =>
+                await this._service.RetryPipeline.ExecuteAsync(async cancellationToken =>
                 {
                     executionCount++;
                     await Task.CompletedTask;
@@ -96,9 +96,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             var executionCount = 0;
 
             // Act & Assert
-            Assert.ThrowsAsync<TaskCanceledException>(async () =>
+            await Assert.ThrowsAsync<TaskCanceledException>(async () =>
             {
-                await this._service.RetryPipeline.ExecuteAsync(async _ =>
+                await this._service.RetryPipeline.ExecuteAsync(async cancellationToken =>
                 {
                     executionCount++;
                     await Task.CompletedTask;
@@ -161,9 +161,9 @@ namespace ApiSeguimientoCADS.Tests.Services
             var executionCount = 0;
 
             // Act & Assert - Should retry before breaking circuit
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await Assert.ThrowsAsync<HttpRequestException>(async () =>
             {
-                await this._service.CircuitBreakerPipeline.ExecuteAsync(async _ =>
+                await this._service.CircuitBreakerPipeline.ExecuteAsync(async cancellationToken =>
                 {
                     executionCount++;
                     await Task.CompletedTask;
@@ -183,9 +183,9 @@ namespace ApiSeguimientoCADS.Tests.Services
         public async Task TimeoutPipeline_WhenOperationCompletesQuickly_Succeeds()
         {
             // Arrange & Act
-            var result = await this._service.TimeoutPipeline.ExecuteAsync(async _ =>
+            var result = await this._service.TimeoutPipeline.ExecuteAsync(async cancellationToken =>
             {
-                await Task.Delay(10); // Quick operation
+                await Task.Delay(10, cancellationToken); // Quick operation
                 return "Success";
             }, CancellationToken.None);
 
@@ -194,14 +194,14 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void TimeoutPipeline_WhenOperationExceedsTimeout_ThrowsTimeoutException()
+        public async Task TimeoutPipeline_WhenOperationExceedsTimeout_ThrowsTimeoutException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<TimeoutRejectedException>(async () =>
+            await Assert.ThrowsAsync<TimeoutRejectedException>(async () =>
             {
-                await this._service.TimeoutPipeline.ExecuteAsync(async _ =>
+                await this._service.TimeoutPipeline.ExecuteAsync(async cancellationToken =>
                 {
-                    await Task.Delay(15000); // Exceeds 10s timeout
+                    await Task.Delay(15000, cancellationToken); // Exceeds 10s timeout
                     return "Should not reach here";
                 }, CancellationToken.None);
             });
@@ -238,61 +238,58 @@ namespace ApiSeguimientoCADS.Tests.Services
         public async Task BulkheadPipeline_AllowsUpToConcurrencyLimit()
         {
             // Arrange
-            var tasks = new ValueTask[5]; // Max concurrency is 5
+            var tasks = new Task[5]; // Max concurrency is 5
 
             // Act
             for (int i = 0; i < 5; i++)
             {
-                tasks[i] = this._service.BulkheadPipeline.ExecuteAsync(async _ =>
+                tasks[i] = this._service.BulkheadPipeline.ExecuteAsync(async cancellationToken =>
                 {
-                    await Task.Delay(50);
-                }, CancellationToken.None);
+                    await Task.Delay(50, cancellationToken);
+                }, CancellationToken.None).AsTask();
             }
 
             // Assert - All 5 should complete without throwing BulkheadRejectedException
-            foreach (var task in tasks)
-            {
-                Assert.DoesNotThrowAsync(async () => await task);
-            }
+            await Assert.DoesNotThrowAsync(async () => await Task.WhenAll(tasks));
         }
 
         [Test]
         public async Task BulkheadPipeline_RejectsWhenConcurrencyAndQueueAreFull()
         {
             // Arrange
-            var longRunningTasks = new List<ValueTask>(); // Fill concurrency limit
+            var longRunningTasks = new List<Task>(); // Fill concurrency limit
 
             // Start 5 long-running tasks to fill concurrency
             for (int i = 0; i < 5; i++)
             {
-                longRunningTasks.Add(this._service.BulkheadPipeline.ExecuteAsync(async _ =>
+                longRunningTasks.Add(this._service.BulkheadPipeline.ExecuteAsync(async cancellationToken =>
                 {
-                    await Task.Delay(1000); // Long operation
-                }, CancellationToken.None));
+                    await Task.Delay(1000, cancellationToken); // Long operation
+                }, CancellationToken.None).AsTask());
             }
 
             // Give tasks time to start
             await Task.Delay(50);
 
             // Queue up to the limit (10 items)
-            var queuedTasks = new List<ValueTask>();
+            var queuedTasks = new List<Task>();
             for (int i = 0; i < 10; i++)
             {
-                queuedTasks.Add(this._service.BulkheadPipeline.ExecuteAsync(async _ =>
+                queuedTasks.Add(this._service.BulkheadPipeline.ExecuteAsync(async cancellationToken =>
                 {
-                    await Task.Delay(100);
-                }, CancellationToken.None));
+                    await Task.Delay(100, cancellationToken);
+                }, CancellationToken.None).AsTask());
             }
 
             // Give queued tasks time to queue
             await Task.Delay(50);
 
             // Act & Assert - 16th concurrent request should be rejected
-            Assert.ThrowsAsync<BulkheadRejectedException>(async () =>
+            await Assert.ThrowsAsync<BulkheadRejectedException>(async () =>
             {
-                await this._service.BulkheadPipeline.ExecuteAsync(async _ =>
+                await this._service.BulkheadPipeline.ExecuteAsync(async cancellationToken =>
                 {
-                    await Task.Delay(100);
+                    await Task.Delay(100, cancellationToken);
                 }, CancellationToken.None);
             });
 
@@ -304,9 +301,9 @@ namespace ApiSeguimientoCADS.Tests.Services
         public async Task BulkheadPipeline_OnSuccess_ReturnsResult()
         {
             // Act
-            var result = await this._service.BulkheadPipeline.ExecuteAsync(async _ =>
+            var result = await this._service.BulkheadPipeline.ExecuteAsync(async cancellationToken =>
             {
-                await Task.Delay(10);
+                await Task.Delay(10, cancellationToken);
                 return "Success";
             }, CancellationToken.None);
 
