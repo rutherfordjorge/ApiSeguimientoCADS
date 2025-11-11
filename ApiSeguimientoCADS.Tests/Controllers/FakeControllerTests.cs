@@ -27,7 +27,7 @@ namespace ApiSeguimientoCADS.Tests.Controllers
         private Mock<IAppLogger<FakeController>> _loggerMock = null!;
         private Mock<IUsersHandler> _handlerMock = null!;
         private Mock<IOptions<EPSiniestroPorAseguradoSettings>> _settingsMock = null!;
-        private Mock<IHttpClientService>? _httpClientServiceMock;
+        private Mock<IHttpClientService> _httpClientServiceMock = null!;
 
         private FakeController _controller = null!;
 
