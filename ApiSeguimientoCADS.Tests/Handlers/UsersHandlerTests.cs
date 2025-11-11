@@ -48,14 +48,15 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GenerarUrlFrontend_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GenerarUrlFrontend_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await this._handler.GenerarUrlFrontend(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._handler.GenerarUrlFrontend(null!));
         }
 
         [Test]
-        public void GenerarUrlFrontend_WhenRutTitularIsEmpty_ThrowsArgumentException()
+        public async Task GenerarUrlFrontend_WhenRutTitularIsEmpty_ThrowsArgumentException()
         {
             // Arrange
             var request = new ValidateAccessRequest
@@ -66,11 +67,12 @@ namespace ApiSeguimientoCADS.Tests.Handlers
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await this._handler.GenerarUrlFrontend(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GenerarUrlFrontend(request));
         }
 
         [Test]
-        public void GenerarUrlFrontend_WhenOrigenIsNone_ThrowsArgumentException()
+        public async Task GenerarUrlFrontend_WhenOrigenIsNone_ThrowsArgumentException()
         {
             // Arrange
             var request = new ValidateAccessRequest
@@ -81,11 +83,12 @@ namespace ApiSeguimientoCADS.Tests.Handlers
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await this._handler.GenerarUrlFrontend(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GenerarUrlFrontend(request));
         }
 
         [Test]
-        public void GenerarUrlFrontend_WhenRolIsNone_ThrowsArgumentException()
+        public async Task GenerarUrlFrontend_WhenRolIsNone_ThrowsArgumentException()
         {
             // Arrange
             var request = new ValidateAccessRequest
@@ -96,7 +99,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () => await this._handler.GenerarUrlFrontend(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GenerarUrlFrontend(request));
         }
 
         [Test]
@@ -167,7 +171,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GenerarUrlFrontend_WhenFrontendBaseUrlIsNotConfigured_ThrowsInvalidOperationException()
+        public async Task GenerarUrlFrontend_WhenFrontendBaseUrlIsNotConfigured_ThrowsInvalidOperationException()
         {
             // Arrange
             this._configurationMock
@@ -199,7 +203,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ReturnsAsync(userAccessResponse);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this._handler.GenerarUrlFrontend(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                this._handler.GenerarUrlFrontend(request));
         }
 
         [Test]

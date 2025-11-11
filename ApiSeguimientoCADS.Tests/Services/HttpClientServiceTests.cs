@@ -88,11 +88,11 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region SendAsync Tests
 
         [Test]
-        public void SendAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task SendAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._service.SendAsync<TestResponse>(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._service.SendAsync<TestResponse>(null!));
         }
 
         [Test]
@@ -317,11 +317,11 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region SendWithoutRetryAsync Tests
 
         [Test]
-        public void SendWithoutRetryAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task SendWithoutRetryAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._service.SendWithoutRetryAsync<TestResponse>(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._service.SendWithoutRetryAsync<TestResponse>(null!));
         }
 
         [Test]
@@ -430,7 +430,7 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void PostAsync_WhenRequestFails_ThrowsHttpRequestException()
+        public async Task PostAsync_WhenRequestFails_ThrowsHttpRequestException()
         {
             // Arrange
             var url = new Uri("https://test.com/api");
@@ -449,8 +449,8 @@ namespace ApiSeguimientoCADS.Tests.Services
                 });
 
             // Act & Assert
-            Assert.ThrowsAsync<HttpRequestException>(async () =>
-                await this._service.PostAsync(url, jsonBody));
+            await Assert.ThrowsAsync<HttpRequestException>(() =>
+                this._service.PostAsync(url, jsonBody));
         }
 
         #endregion

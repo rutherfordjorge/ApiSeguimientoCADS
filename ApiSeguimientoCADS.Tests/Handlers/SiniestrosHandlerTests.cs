@@ -81,48 +81,48 @@ namespace ApiSeguimientoCADS.Tests.Handlers
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._handler.GetSiniestrosPorAsegurado(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._handler.GetSiniestrosPorAsegurado(null!));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = null! };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsEmpty_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsEmpty_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = string.Empty };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsWhiteSpace_ThrowsArgumentException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsWhiteSpace_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = "   " };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
+        public async Task GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
@@ -132,8 +132,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
                 .ReturnsAsync((SiniestrosResponse?)null);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await this._handler.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                this._handler.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
@@ -163,61 +163,61 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data.Count, Is.EqualTo(1));
+            Assert.That(result!.Data, Is.Not.Null);
+            Assert.That(result!.Data!.Count, Is.EqualTo(1));
             this._siniestrosServiceMock.Verify(s => s.GetSiniestrosPorAsegurado(request), Times.Once);
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetDetalleSiniestros_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._handler.GetDetalleSiniestros(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._handler.GetDetalleSiniestros(null!));
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINsinieIsZero_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINsinieIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 0, INdocto = 100 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetDetalleSiniestros(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetDetalleSiniestros(request));
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINsinieIsNegative_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINsinieIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = -1, INdocto = 100 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetDetalleSiniestros(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetDetalleSiniestros(request));
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINdoctoIsZero_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINdoctoIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = 0 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetDetalleSiniestros(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetDetalleSiniestros(request));
         }
 
         [Test]
-        public void GetDetalleSiniestros_WhenINdoctoIsNegative_ThrowsArgumentException()
+        public async Task GetDetalleSiniestros_WhenINdoctoIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = -1 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetDetalleSiniestros(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetDetalleSiniestros(request));
         }
 
         [Test]
@@ -245,44 +245,44 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data.Count, Is.EqualTo(1));
+            Assert.That(result!.Data, Is.Not.Null);
+            Assert.That(result!.Data!.Count, Is.EqualTo(1));
             this._siniestrosServiceMock.Verify(s => s.GetDatosDelSiniestro(request), Times.Once);
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsNull_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsNull_ThrowsArgumentException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosDetallePorAsegurado(null!));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosDetallePorAsegurado(null!));
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsEmpty_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsEmpty_ThrowsArgumentException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosDetallePorAsegurado(string.Empty));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosDetallePorAsegurado(string.Empty));
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsWhiteSpace_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsWhiteSpace_ThrowsArgumentException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosDetallePorAsegurado("   "));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosDetallePorAsegurado("   "));
         }
 
         [Test]
-        public void GetSiniestrosDetallePorAsegurado_WhenRutIsInvalid_ThrowsArgumentException()
+        public async Task GetSiniestrosDetallePorAsegurado_WhenRutIsInvalid_ThrowsArgumentException()
         {
             // Arrange
             var invalidRut = "12345678-0"; // Invalid checksum
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._handler.GetSiniestrosDetallePorAsegurado(invalidRut));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._handler.GetSiniestrosDetallePorAsegurado(invalidRut));
         }
 
         [Test]
@@ -304,9 +304,9 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0));
-            Assert.That(result.TiposSiniestros.Count, Is.EqualTo(0));
+            Assert.That(result!.Siniestros, Is.Not.Null);
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
+            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -328,8 +328,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0));
-            Assert.That(result.TiposSiniestros.Count, Is.EqualTo(0));
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
+            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -359,8 +359,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0));
-            Assert.That(result.TiposSiniestros.Count, Is.EqualTo(0));
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
+            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -408,12 +408,12 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(1));
-            Assert.That(result.TiposSiniestros.Count, Is.EqualTo(1));
-            Assert.That(result.TiposSiniestros[0].Nombre, Is.EqualTo("Vehículo"));
+            Assert.That(result!.Siniestros, Is.Not.Null);
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(1));
+            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(1));
+            Assert.That(result!.TiposSiniestros[0].Nombre, Is.EqualTo("Vehículo"));
 
-            var siniestro = result.Siniestros[0];
+            var siniestro = result!.Siniestros[0];
             Assert.That(siniestro.NumSiniestro, Is.EqualTo("123"));
             Assert.That(siniestro.TipoSinistros, Is.EqualTo("auto"));
             Assert.That(siniestro.GlosaSiniestro, Does.Contain("ABC123"));
@@ -449,8 +449,8 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0));
-            Assert.That(result.TiposSiniestros.Count, Is.EqualTo(0));
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
+            Assert.That(result!.TiposSiniestros!.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -484,7 +484,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0)); // Failed, so no siniestros added
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0)); // Failed, so no siniestros added
         }
 
         [Test]
@@ -523,7 +523,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(0));
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -571,7 +571,7 @@ namespace ApiSeguimientoCADS.Tests.Handlers
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Siniestros.Count, Is.EqualTo(1)); // Only one, duplicates removed
+            Assert.That(result!.Siniestros!.Count, Is.EqualTo(1)); // Only one, duplicates removed
             this._siniestrosServiceMock.Verify(
                 s => s.GetDatosDelSiniestro(It.IsAny<SiniestrosDetRequest>()),
                 Times.Once); // Called only once due to deduplication

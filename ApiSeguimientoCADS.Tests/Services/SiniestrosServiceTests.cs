@@ -110,22 +110,22 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region GetSiniestrosPorAsegurado Tests
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetSiniestrosPorAsegurado_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._service.GetSiniestrosPorAsegurado(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._service.GetSiniestrosPorAsegurado(null!));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentNullException()
+        public async Task GetSiniestrosPorAsegurado_WhenRutAseguradoIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = null! };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._service.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._service.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
@@ -158,8 +158,8 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data.Count, Is.EqualTo(1));
+            Assert.That(result!.Data, Is.Not.Null);
+            Assert.That(result!.Data!.Count, Is.EqualTo(1));
             this._httpServiceMock.Verify(
                 s => s.PostWithHeadersAsync<object, SiniestrosResponse>(
                     It.IsAny<Uri>(),
@@ -170,7 +170,7 @@ namespace ApiSeguimientoCADS.Tests.Services
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
+        public async Task GetSiniestrosPorAsegurado_WhenServiceReturnsNull_ThrowsInvalidOperationException()
         {
             // Arrange
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
@@ -184,12 +184,12 @@ namespace ApiSeguimientoCADS.Tests.Services
                 .ReturnsAsync((SiniestrosResponse?)null);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await this._service.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                this._service.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenBasePathIsEmpty_ThrowsInvalidOperationException()
+        public async Task GetSiniestrosPorAsegurado_WhenBasePathIsEmpty_ThrowsInvalidOperationException()
         {
             // Arrange
             var invalidSettings = new EPSiniestroPorAseguradoSettings
@@ -213,12 +213,12 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await service.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                service.GetSiniestrosPorAsegurado(request));
         }
 
         [Test]
-        public void GetSiniestrosPorAsegurado_WhenBasePathIsInvalid_ThrowsInvalidOperationException()
+        public async Task GetSiniestrosPorAsegurado_WhenBasePathIsInvalid_ThrowsInvalidOperationException()
         {
             // Arrange
             var invalidSettings = new EPSiniestroPorAseguradoSettings
@@ -242,8 +242,8 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosRequest { RutAsegurado = "12345678" };
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await service.GetSiniestrosPorAsegurado(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                service.GetSiniestrosPorAsegurado(request));
         }
 
         #endregion
@@ -251,55 +251,55 @@ namespace ApiSeguimientoCADS.Tests.Services
         #region GetDatosDelSiniestro Tests
 
         [Test]
-        public void GetDatosDelSiniestro_WhenRequestIsNull_ThrowsArgumentNullException()
+        public async Task GetDatosDelSiniestro_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await this._service.GetDatosDelSiniestro(null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                this._service.GetDatosDelSiniestro(null!));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenINsinieIsZero_ThrowsArgumentException()
+        public async Task GetDatosDelSiniestro_WhenINsinieIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 0, INdocto = 100 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._service.GetDatosDelSiniestro(request));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenINsinieIsNegative_ThrowsArgumentException()
+        public async Task GetDatosDelSiniestro_WhenINsinieIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = -1, INdocto = 100 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._service.GetDatosDelSiniestro(request));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenINdoctoIsZero_ThrowsArgumentException()
+        public async Task GetDatosDelSiniestro_WhenINdoctoIsZero_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = 0 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._service.GetDatosDelSiniestro(request));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenINdoctoIsNegative_ThrowsArgumentException()
+        public async Task GetDatosDelSiniestro_WhenINdoctoIsNegative_ThrowsArgumentException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 100, INdocto = -1 };
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-                await this._service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                this._service.GetDatosDelSiniestro(request));
         }
 
         [Test]
@@ -330,13 +330,13 @@ namespace ApiSeguimientoCADS.Tests.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.Not.Null);
-            Assert.That(result.Data!.Count, Is.EqualTo(1));
-            Assert.That(result.Data!.ElementAt(0).Patente, Is.EqualTo("ABC123"));
+            Assert.That(result!.Data, Is.Not.Null);
+            Assert.That(result!.Data!.Count, Is.EqualTo(1));
+            Assert.That(result!.Data!.ElementAt(0).Patente, Is.EqualTo("ABC123"));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenServiceReturnsNull_ThrowsInvalidOperationException()
+        public async Task GetDatosDelSiniestro_WhenServiceReturnsNull_ThrowsInvalidOperationException()
         {
             // Arrange
             var request = new SiniestrosDetRequest { INsinie = 123, INdocto = 456 };
@@ -349,12 +349,12 @@ namespace ApiSeguimientoCADS.Tests.Services
                 .ReturnsAsync((SiniestrosDetalleResponse?)null);
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await this._service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                this._service.GetDatosDelSiniestro(request));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenBasePathIsEmpty_ThrowsInvalidOperationException()
+        public async Task GetDatosDelSiniestro_WhenBasePathIsEmpty_ThrowsInvalidOperationException()
         {
             // Arrange
             var invalidSettings = new EPGetdatosdelsiniestroSettings
@@ -374,12 +374,12 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosDetRequest { INsinie = 123, INdocto = 456 };
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                service.GetDatosDelSiniestro(request));
         }
 
         [Test]
-        public void GetDatosDelSiniestro_WhenBasePathIsInvalid_ThrowsInvalidOperationException()
+        public async Task GetDatosDelSiniestro_WhenBasePathIsInvalid_ThrowsInvalidOperationException()
         {
             // Arrange
             var invalidSettings = new EPGetdatosdelsiniestroSettings
@@ -399,8 +399,8 @@ namespace ApiSeguimientoCADS.Tests.Services
             var request = new SiniestrosDetRequest { INsinie = 123, INdocto = 456 };
 
             // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await service.GetDatosDelSiniestro(request));
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                service.GetDatosDelSiniestro(request));
         }
 
         [Test]
